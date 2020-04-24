@@ -2,9 +2,6 @@
 % and utility functions to use them
 
 
-just_write_something() :-
-    write('SOMETHING ! \n').
-
 % get_initial_uninformed_comment(-Initial_comment, -Keyword, -Pattern_index)
 get_initial_uninformed_comment(Initial_comment, none, Pattern_index) :-
     Pattern_index = 0,
@@ -24,13 +21,15 @@ get_initial_uninformed_comment(Initial_comment, none, Pattern_index) :-
     Initial_comment = ec((Comment, none, Pattern_index), -1, 0).
 
 
-% get_informed_comment(+Script, -Comment, -Keyword, -Pattern_index)
-get_informed_comment(Script, Comment, Keyword, Pattern_index) :-
-    % used as getter
+% get_informed_comment(+User_input, +Script, -Comment, -Keyword, -Pattern_index)
+get_informed_comment(User_input, Script, Comment, Keyword, Pattern_index) :-
+    % not only find pattern_index, but also 
+    % unifies variables in response with user_input
+    find_matching_pattern(User_input, Script, Pattern_index),
+
+    % used as getter of Keyword
     script_contains_keyword(Script, Keyword),
 
-    % only temporary, not resolved yet
-    Pattern_index = 0,
     get_action(Keyword, Pattern_index, Action_index),
     get_script_pattern_by_index(Script, Pattern_index, Pattern),
     get_pattern_actions(Pattern, Actions),
@@ -38,7 +37,8 @@ get_informed_comment(Script, Comment, Keyword, Pattern_index) :-
     % built-in
     % get nth element of Actions list and store it
     % into Action
-    nth0(Action_index, Actions, response(Comment)).
+    nth0(Action_index, Actions, response(C)),
+    flatten(C,Comment).
 
 assert_next_action(Keyword, Pattern_index) :-
     (
@@ -59,9 +59,9 @@ assert_next_action(Keyword, Pattern_index) :-
     retract(memory_current_action(Keyword, Pattern_index, Action_index)),
     asserta(memory_current_action(Keyword, Pattern_index, NAI)).
 
-    
+% --- WORKING WITH SCRIPTS : ---  
 
-% script_contains_keyword(+Script, -Keyword)
+% script_contains_keyword(?Script, ?Keyword)
 script_contains_keyword(Script, Keyword) :-
     scripts(Script),
     Script = script(keyword(Keyword, _),_).
@@ -90,6 +90,10 @@ get_script_pattern_by_index(Script, Pattern_index, Pattern) :-
     % into Pattern
     nth0(Pattern_index, Patterns, Pattern).
 
+% pattern_is_matching(+Pattern, +Matched)
+get_pattern_match(Pattern, Matched) :-
+    Pattern = pattern(Matched, _).
+
 get_pattern_actions(Pattern, Actions) :-
     Pattern = pattern(_, actions(Actions)).
 
@@ -102,6 +106,48 @@ get_ec_keyword_priority(ec(_,Priority,_), Priority).
 
 get_ec_pattern_index(ec(_,_,Score), Score).
 
+find_matching_pattern(User_input, Script, Pattern_index) :-
+    get_script_patterns(Script, Patterns),
+    find_matching_pattern_(User_input, Patterns, 0, Pattern_index).
+
+find_matching_pattern_(User_input, [Pattern|Rest], I, Pattern_index) :-
+    get_pattern_match(Pattern, matched(Matched)),
+    (
+        match(User_input, Matched) -> Pattern_index = I;
+        NI is I + 1, find_matching_pattern_(User_input, Rest, NI, Pattern_index)
+    ).
+
+% match(+User_input, +Pattern)
+match(User_input, [Pattern_head|Pattern_tail]) :-
+    var(Pattern_head) -> match_variable(User_input, Pattern_tail, Pattern_head, [], Rest_of_input, Rest_of_pattern), match(Rest_of_input, Rest_of_pattern);
+    User_input = [Pattern_head|Ui_tail], match(Ui_tail, Pattern_tail).
+
+match([], []).
+
+% match_variable(+User_input, +Pattern, +Pattern_head, +Acc, -Rest_of_input, -Rest_of_pattern)
+match_variable(User_input, [Pat_head|Pat_tail], Var, Acc, User_input, [Pat_head|Pat_tail]) :-
+    var(Pat_head),!, reverse(Acc, Var).
+
+match_variable([Inp_head|Inp_tail], [Inp_head|Pat_tail], Var, Acc, Rest_of_input, Rest_of_pattern) :-
+    !,consume_not_var(Inp_tail, Pat_tail, Rest_of_input, Rest_of_pattern),
+    reverse(Acc, Var).
+
+match_variable([Inp_head|Inp_tail], Pattern, Var, Acc, Rest_of_input, Rest_of_pattern) :-
+    !,match_variable(Inp_tail, Pattern, Var, [Inp_head| Acc], Rest_of_input, Rest_of_pattern).
+
+match_variable(User_input, [], Var, Acc, [], []) :-
+    reverse(Acc, Reversed), 
+    append(Reversed, User_input, Var).
+
+consume_not_var([], [], [], []).
+
+consume_not_var(User_input, [Pattern_head| Pattern_tail], User_input, [Pattern_head| Pattern_tail]) :-
+    var(Pattern_head), !.
+
+consume_not_var([Inp_head|Inp_tail], [Inp_head|Pat_tail], Rest_of_input, Rest_of_pattern) :-
+    consume_not_var(Inp_tail, Pat_tail, Rest_of_input, Rest_of_pattern).
+
+
 % we use memory_current_action as a predicate 
 % with action to be performed when
 % nothing betters appears to be done
@@ -110,14 +156,28 @@ get_ec_pattern_index(ec(_,_,Score), Score).
 :- dynamic memory_current_action/3.
 memory_current_action(_,_,0).
 
+% ---
 
-
+% --- SCRIPTS ---
+% to be able to call script and get important properties of it 
+% we keep the following structure :
+% scripts(
+%   script(
+%       keyword(keyword, priority),
+%       [pattern_array]
+%       )
+%   )
+% in pattern array there are patterns to be matched
+% and Eliza's responses to matched patterns
 
 % first script, called at the start of running of Eliza
 start_script([dobry, den, porozpravajte, mi, o, vasom, probleme, '!']).
 
 % quit script, called at the end of running
 quit_script([dakujem, za, podnetny, rozhovor, '.', dufam, ',', ze, sa, este, niekedy, stretneme, '.']).
+
+
+
 
 % none_script, called if Eliza hadn't understood what's going on
 none_script(
@@ -154,6 +214,30 @@ scripts(
     )
 ).
 
+% if_script, called after detection of word if - "ak"
+scripts(
+    script(
+        keyword(ak, 3),
+        [
+            pattern(
+                matched([_, ak, by,si, Y]),
+                actions([
+                    response([co, by, sa, stalo, ak, by, som, Y]),
+                    response([dufas, ze, by, som, Y, '?']),
+                    response([naozaj, si, myslis, ',', ze, by, som, Y, '?'])
+                ])
+            ),
+            pattern(
+                matched([_, ak, by, som, Y]),
+                actions([
+                    response([co, by, sa, stalo, ak, by, si, Y, '?']),
+                    response([dufas, ',', ze, by, si, Y, '?'])
+                ])
+            )
+        ]
+    )
+).
+
 halve(L,A,B) :- halve_(L,L,A,B).
 
 halve_([], R, [], R). % 1.
@@ -165,8 +249,10 @@ merge([], YS, YS) :- !.
 merge([XScript|XS], [YScript|YS], R) :-
     get_script_priority(XScript, X),
     get_script_priority(YScript, Y),
-    ( X @=< Y -> merge(XS, [Y|YS], S), R = [X|S]
-    ; merge([X|XS], YS, S), R = [Y|S]
+    ( 
+        X @< Y -> merge(XS, [YScript|YS], S), R = [XScript|S];
+        X = Y -> merge(XS, YS, S), R = [XScript|S];
+        merge([XScript|XS], YS, S), R = [YScript|S]
     ).
 
 merge_sort([], []) :- !.
