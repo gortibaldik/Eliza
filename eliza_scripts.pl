@@ -16,7 +16,8 @@ get_initial_uninformed_comment(Initial_comment, none, Pattern_index, Priority) :
     % built-in
     % get nth element of Actions list and store it
     % into response(Comment)
-    nth0(Action_index, Actions, response(Comment)),
+    nth0(Action_index, Actions, response(C)),
+    flatten(C, Comment),
 
     Initial_comment = Comment.
 
@@ -229,7 +230,7 @@ scripts(
 % if_script, called after detection of word if - "ak"
 scripts(
     script(
-        keyword(ak, 3),
+        keyword(ak, 4),
         [
             pattern(
                 matched([_, ak, by,si, Y]),
@@ -246,6 +247,32 @@ scripts(
                     response([co, by, sa, stalo, ak, by, ste, Y, '?']),
                     response([dufate, ',', ze, by, ste, Y, '?']),
                     response([preco, rozmyslate, ',', ze, by, ste, Y, '?'])
+                ])
+            )
+        ]
+    )
+).
+
+scripts(
+    script(
+        keyword(vas, 3),
+        [
+            pattern(
+                matched([_, vas, _, class(family_declined, F), X]),
+                actions([
+                    response([povedzte, mi, viac, o, vasej, rodine, '!']),
+                    response([je, este, niekto, vo, vasej, rodine, kto, X, '?']),
+                    response([myslite, vazne, ',', ked, hovorite, ',', ze, F, X, '?']),
+                    response([F,'?']),
+                    response([co, vam, este, prichadza, na, mysel, ',', ked, hovorite, ':', '\"', F, X, '\"'])
+                ])
+            ),
+            pattern(
+                matched([_,vas,X]),
+                actions([
+                    response([vas, X, '?']),
+                    response([preco, hovorite, ze, vas, X, '?']),
+                    response([je, to, pre, vas, dolezite, ',', ze, vas, X, '?'])
                 ])
             )
         ]
