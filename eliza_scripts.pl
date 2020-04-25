@@ -297,6 +297,27 @@ scripts(Script) :-
         ]
      ).
 
+scripts(Script) :-
+    everybody(Everybody), 
+    Script = script(
+        keyword(Everybody, 2),
+        [
+            pattern(
+                matched([_, Everybody, _]),
+                actions([
+                    response([naozaj, Everybody, '?']),
+                    response([mozete, mi, to, upresnit, '?']),
+                    response([je, to, niekto, specialny, '?']),
+                    response([uvedte, priklad, ',', koho, sa, to, tyka,'.']),
+                    response([myslite, na, niekoho, konkretneho, '?']),
+                    response([kto,',', ak, sa, smiem, opytat, '?']),
+                    response([mate, v, hlave, konkretnu, osobu, ',', ze, '?']),
+                    response([ked, sa, nad, tym, zamyslite, ',', o, kom, rozpravate, '?'])
+                ])
+            )
+        ]
+    ).
+
 
 scripts(
     script(

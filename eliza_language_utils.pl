@@ -7,6 +7,8 @@ punctuation('?').
 punctuation(';').
 punctuation(':').
 
+lemm_([k,a,z,d,y], [v,s,e,t,c,i]) :-!.
+
 lemm_([o,s,p,r,a,v,e|_], "prepac") :- !. 
 
 
@@ -75,3 +77,6 @@ family_declined_([m,a,m|[_|_]]).
 family_declined(X) :-
     atom_chars(X, Chars),
     family_declined_(Chars).
+
+everybody(vsetci).
+everybody(nikto).
