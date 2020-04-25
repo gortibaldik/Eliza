@@ -17,6 +17,7 @@ main_prompt :-
 
 get_comment(User_input, Output) :-
     traverse_input_stem_lemm(User_input, Stemmed_lemmed),
+
     get_scripts_matching_keywords(Stemmed_lemmed, Scripts),
 
     % after getting scripts with matching comments, we process
@@ -28,17 +29,23 @@ get_comment(User_input, Output) :-
 
     
 get_comment_(_, [], Output, Keyword, Pattern_index) :-
-    get_initial_uninformed_comment(ec((Output,_,_),_,_), Keyword, Pattern_index).
+    get_initial_uninformed_comment(Output, Keyword, Pattern_index, _).
 
-get_comment_(User_input, [Script|_], Output, Keyword, Pattern_index) :-
+get_comment_(User_input, Scripts, Output, Keyword, Pattern_index) :-
     % at first we get uninformed response from Eliza
     % without any knowledge of User_input
-    get_initial_uninformed_comment(Initial_comment, Initial_keyword, Initial_pattern_index),
+    get_initial_uninformed_comment(IC, IK, IPI, IPR),
 
-    get_script_priority(Script, Priority),
-    get_ec_keyword_priority(Initial_comment, Initial_priority),
+    % then we traverse all the scripts to find the best
+    find_best_from_scripts(User_input, Scripts, (IC, IK, IPI, IPR), Output, Keyword, Pattern_index).
+
+find_best_from_scripts(User_input, [Script|Rest], (IC, IK, IPI, IPR), Output, Keyword, Pattern_index) :-
+    get_script_priority(Script, Informed_priority),
     (
-        Initial_priority > Priority ->  ( get_ec_comment(Initial_comment, Response), Response = e(Output,_,_),
-            Keyword = Initial_keyword, Pattern_index = Initial_pattern_index);
-        get_informed_comment(User_input, Script, Informed_comment, Keyword, Pattern_index), Output = Informed_comment
+        IPR > Informed_priority -> (Output = IC, Keyword = IK, Pattern_index = IPI);
+        get_informed_comment(User_input, Script, Informed_comment, Informed_Keyword, Informed_index) ->
+            find_best_from_scripts(User_input, Rest, (Informed_comment, Informed_Keyword, Informed_index, Informed_priority), Output, Keyword, Pattern_index);
+        find_best_from_scripts(User_input, Rest, (IC, IK, IPI, IPR), Output, Keyword, Pattern_index)
     ).
+
+find_best_from_scripts(_, [], (IC,IK, IPI, _), IC, IK, IPI).
