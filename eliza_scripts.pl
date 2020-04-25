@@ -271,6 +271,29 @@ scripts(Script) :-
      ).
 
 
+scripts(
+    script(
+        keyword(co, 0),
+        [
+        pattern(
+            matched([_]),
+            actions([
+            response([preco, sa, pytate, '?']),
+            response([zaujima, vas, ta, otazka, '?']),
+            response([co, je, to, ',', co, naozaj, chcete, vediet, ?]) ,
+            response([casto, sa, zaoberate, takymito, otazkami, ?]),
+            response([ktora, odpoved, by, sa, vam, najviac, pacila, ?]),
+            response([co, si, myslite, ?]),
+            response([co, vam, pride, na, um, ked, sa, toto, opytate, ?]),
+            response([uz, ste, sa, nad, touto, otazkou, niekedy, zamyslali, ?]),
+            response([uz, ste, sa, na, to, niekoho, pytali, ?])
+                ])
+            )
+        ]
+    )
+).
+
+
 
 halve(L,A,B) :- halve_(L,L,A,B).
 
