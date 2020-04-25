@@ -3,8 +3,9 @@
 
 
 % get_initial_uninformed_comment(-Initial_comment, -Keyword, -Pattern_index)
-get_initial_uninformed_comment(Initial_comment, none, Pattern_index) :-
+get_initial_uninformed_comment(Initial_comment, none, Pattern_index, Priority) :-
     Pattern_index = 0,
+    Priority = -1,
 
     % we get initial uninformed comment from Eliza, from none_script
     get_action(none, Pattern_index, Action_index),
@@ -14,11 +15,10 @@ get_initial_uninformed_comment(Initial_comment, none, Pattern_index) :-
 
     % built-in
     % get nth element of Actions list and store it
-    % into Action
+    % into response(Comment)
     nth0(Action_index, Actions, response(Comment)),
 
-    % comments are in format ec((Elizas comment, keyword, PatternIndex), priority, 
-    Initial_comment = ec((Comment, none, Pattern_index), -1, 0).
+    Initial_comment = Comment.
 
 
 % get_informed_comment(+User_input, +Script, -Comment, -Keyword, -Pattern_index)
@@ -269,6 +269,8 @@ scripts(Script) :-
             )
         ]
      ).
+
+
 
 halve(L,A,B) :- halve_(L,L,A,B).
 
