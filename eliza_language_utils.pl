@@ -54,17 +54,13 @@ member_declined(Word, [Input_Head|_]) :-
 member_declined(Word, [_| Input_rest]) :-
     member_declined(Word, Input_rest).
 
-
-% remove_stop_words(+[Word|Sentence],-Result )
-%   remove stop words from input
-
 family(brat).
 family(sestr).
 family(otec).
 family(otc).
 family(mam).
 family(sesternic).
-family(bratranc).
+family(bratran).
 family(stryk).
 family(tet).
 
@@ -73,6 +69,10 @@ family_declined_([b,r,a,t|[_|_]]).
 family_declined_([s,e,s,t,r|[_|_]]).
 family_declined_([o,t,c|[_|_]]).
 family_declined_([m,a,m|[_|_]]).
+family_declined_([s,t,r,y,k|[_|_]]).
+family_declined_([t,e,t|[_|_]]).
+family_declined_([s,e,s,t,e,r,n,i,c|[_|_]]).
+family_declined_([b,r,a,t,r,a,n|[_|_]]).
 
 family_declined(X) :-
     atom_chars(X, Chars),
