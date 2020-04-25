@@ -31,6 +31,7 @@ get_informed_comment(User_input, Script, Action, Keyword, Pattern_index) :-
     % used as getter of Keyword
     script_contains_keyword(Script, Keyword),
 
+
     get_action(Keyword, Pattern_index, Action_index),
     get_script_pattern_by_index(Script, Pattern_index, Pattern),
     get_pattern_actions(Pattern, Actions),
@@ -64,7 +65,7 @@ assert_next_action(Keyword, Pattern_index) :-
 % script_contains_keyword(?Script, ?Keyword)
 script_contains_keyword(Script, Keyword) :-
     scripts(Script),
-    Script = script(keyword(Keyword, _),_).
+    Script = script(keyword(Keyword, _),_). 
 
 % get_action(+Keyword, +Pattern_index, -Action_index)
 %   gets action stored in memory_current_action
@@ -320,6 +321,40 @@ scripts(Script) :-
         ]
     ).
 
+% 'remember' script
+scripts(
+    script(
+        keyword(pamata,5),
+        [
+            pattern(
+                matched([_, pamatate, si, na, X]),
+                actions([
+                    response([casto, myslite, na, X,'?']),
+                    response([mysliac, na, X, ',', prichadza, vam, este, nieco, na, mysel, '?']),
+                    response([na, co, este, si, spominate, '?']),
+                    response([preco, ste, si, spomenuli, na, X, prave, teraz, '?']),
+                    response([co, na, sucasnej, situacii, vam, pripomina, X, '?'])
+                ])
+            ),
+            pattern(
+                matched([_,pamatam, si, na, X]),
+                actions([
+                    response([myslite, ',', ze, by, som, zabudol, na, X, '?']),
+                    response([preco, by, som, si, mal, spomenut, na, X, prave, teraz, '?']),
+                    equivalence(co),
+                    response([spominali, ste, na, X, '?'])
+                ])
+            ),
+            pattern(
+                matched([_]),
+                actions([
+                    newkey
+                ])
+            )
+        ]
+    )
+).
+
 % 'what' script
 scripts(
     script(
@@ -328,15 +363,15 @@ scripts(
         pattern(
             matched([_]),
             actions([
-            response([preco, sa, pytate, '?']),
-            response([zaujima, vas, ta, otazka, '?']),
-            response([co, je, to, ',', co, naozaj, chcete, vediet, ?]) ,
-            response([casto, sa, zaoberate, takymito, otazkami, ?]),
-            response([ktora, odpoved, by, sa, vam, najviac, pacila, ?]),
-            response([co, si, myslite, ?]),
-            response([co, vam, pride, na, um, ked, sa, toto, opytate, ?]),
-            response([uz, ste, sa, nad, touto, otazkou, niekedy, zamyslali, ?]),
-            response([uz, ste, sa, na, to, niekoho, pytali, ?])
+                response([preco, sa, pytate, '?']),
+                response([zaujima, vas, ta, otazka, '?']),
+                response([co, je, to, ',', co, naozaj, chcete, vediet, ?]) ,
+                response([casto, sa, zaoberate, takymito, otazkami, ?]),
+                response([ktora, odpoved, by, sa, vam, najviac, pacila, ?]),
+                response([co, si, myslite, ?]),
+                response([co, vam, pride, na, um, ked, sa, toto, opytate, ?]),
+                response([uz, ste, sa, nad, touto, otazkou, niekedy, zamyslali, ?]),
+                response([uz, ste, sa, na, to, niekoho, pytali, ?])
                 ])
             )
         ]

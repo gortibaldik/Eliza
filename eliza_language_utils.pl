@@ -9,10 +9,15 @@ punctuation(':').
 
 lemm_([k,a,z,d,y], [v,s,e,t,c,i]) :-!.
 
+lemm_([p,a,m,a,t,a,s], [p,a,m,a,t,a,m]) :- !.
+lemm_([p,a,m,a,t,a,t,e], [p,a,m,a,t,a,m]) :- !.
+lemm_([p,a,m,a,t,a,m], [p,a,m,a,t,a,t,e]) :- !.
+
 lemm_([o,s,p,r,a,v,e|_], "prepac") :- !. 
 
 
 lemm_([s,o,m], "ste") :- !.
+lemm_([s,t,e], "som") :- !.
 lemm_([m,o,j|X], [v,a,s|X]) :- !.
 lemm_([m,i], "vam") :- !.
 lemm_([t,v,o,j|X], [m,o,j|X]) :-!.
