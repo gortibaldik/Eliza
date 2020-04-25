@@ -28,9 +28,14 @@ traverse_input_stem_lemm([Word|Rest], [Result| ResultRest]) :-
 
 traverse_input_stem_lemm([],[]).
 
+
+no_declination(ak).
 % is_declination(+X, +Y)
 %   returns true if X is declination of Y
+%   we need not decline words like "ak" -> "ako"
+%   because of their different meanings
 is_declination(X, Y) :-
+    \+no_declination(Y),
     atom_chars(X, CharsX), 
     atom_chars(Y, CharsY),
     append(CharsY, _, CharsX).
