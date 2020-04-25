@@ -74,7 +74,7 @@ get_action(Keyword, Pattern_index, Action_index) :-
     Action_index = 0, asserta(memory_current_action(Keyword, Pattern_index, Action_index)).
     
 get_scripts_matching_keywords(User_input, Sorted) :-
-    findall(Script, (scripts(Script), script_contains_keyword(Script, Keyword), member(Keyword, User_input)), MatchedScripts),
+    findall(Script, (scripts(Script), script_contains_keyword(Script, Keyword), member_declined(Keyword, User_input)), MatchedScripts),
     merge_sort(MatchedScripts, Sorted).
 
 
@@ -126,7 +126,10 @@ match(Input, [VarHead|Pattern_tail]) :-
     match(Rest, Pattern_rest).
 
 match([Head|Tail], [Head|Pattern_tail]) :-
-    match(Tail, Pattern_tail).
+    !,match(Tail, Pattern_tail).
+
+match([Head|Tail], [class(C, Head)|Pattern_tail]) :-
+    call(C, Head), match(Tail, Pattern_tail).
 
 % match_var(+Input, +Pattern, -Var, -Rest_of_input, -Rest_of_pattern)
 %   match input to pattern until pattern and input head aren't 
@@ -136,6 +139,17 @@ match_var([_|Rest], [Pattern_head|Pattern_rest], [], Rest, Pattern_rest) :-
     var(Pattern_head), !.
 
 match_var([Head|Rest], [Head|Pattern_rest], [], Rest, Pattern_rest) :-!.
+
+match_var([Head|Rest], [class(C, Head)|Pattern_tail], [], Rest, Pattern_tail) :-
+    call(C, Head),!.
+
+% having introduced scripts with keywords from classes 
+% its not safe to call is_declination, because
+% it calls atom_chars which throws exception on variables
+% therefore we have to check, if Head isn't in form of class(class_name, Variable)
+match_var([DeclinedHead|Rest], [Head|Pattern_rest], [], Rest, Pattern_rest) :-
+    Head \= class(_,_),
+    is_declination(DeclinedHead, Head), !.
 
 
 % implicitly Pattern doesn't have same head
@@ -230,12 +244,31 @@ scripts(
                 matched([_, ak, by, som, Y]),
                 actions([
                     response([co, by, sa, stalo, ak, by, ste, Y, '?']),
-                    response([dufate, ',', ze, by, ste, Y, '?'])
+                    response([dufate, ',', ze, by, ste, Y, '?']),
+                    response([preco, rozmyslate, ',', ze, by, ste, Y, '?'])
                 ])
             )
         ]
     )
 ).
+
+scripts(Script) :-
+    family(Family), 
+    Script = script(
+        keyword(Family, 2),
+        [
+            pattern(
+                matched([_, class(family_declined, F), X]),
+                actions([
+                    response([povedzte, mi, viac, o, vasej, rodine, '!']),
+                    response([je, este, niekto, vo, vasej, rodine, kto, X, '?']),
+                    response([myslite, vazne, ',', ked, hovorite, ',', ze, F, X, '?']),
+                    response([F,'?']),
+                    response([co, vam, este, prichadza, na, mysel, ',', ked, hovorite, ':', '\"', F, X, '\"'])
+                ])
+            )
+        ]
+     ).
 
 halve(L,A,B) :- halve_(L,L,A,B).
 
@@ -249,7 +282,7 @@ merge([XScript|XS], [YScript|YS], R) :-
     get_script_priority(XScript, X),
     get_script_priority(YScript, Y),
     ( 
-        X @< Y -> merge(XS, [YScript|YS], S), R = [XScript|S];
+        X @> Y -> merge(XS, [YScript|YS], S), R = [XScript|S];
         X = Y -> merge(XS, YS, S), R = [XScript|S];
         merge([XScript|XS], YS, S), R = [YScript|S]
     ).
