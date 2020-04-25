@@ -241,7 +241,7 @@ scripts(
                 ])
             ),
             pattern(
-                matched([_, ak, by, som, Y]),
+                matched([_, ak, by, ste, Y]),
                 actions([
                     response([co, by, sa, stalo, ak, by, ste, Y, '?']),
                     response([dufate, ',', ze, by, ste, Y, '?']),
