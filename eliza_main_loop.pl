@@ -36,7 +36,7 @@ get_comment(User_input, Output) :-
         append_to_memory_list(Response)
         ; true
     ), 
-    prepare_new_uninformed_comment(Keyword, Pattern_index).
+    prepare_new_comment(Keyword, Pattern_index).
 
     
 get_comment_(_, [], Output, Keyword, Pattern_index) :-
@@ -63,7 +63,7 @@ find_best_from_scripts(User_input, [Script|Rest], (IC, IK, IPI, IPR), Output, Ke
                 find_best_from_scripts(User_input, Rest, (IC, IK, IPI, IPR), Output, Keyword, Pattern_index)
                 ;
                 Action = equivalence(NewKeyword) ->
-                prepare_new_uninformed_comment(Keyword, Pattern_index),
+                prepare_new_comment(Informed_Keyword, Informed_index),
                 script_contains_keyword(NewScript, NewKeyword),
                 find_best_from_scripts(User_input, [NewScript|Rest], (IC, IK, IPI, IPR), Output, Keyword, Pattern_index)
                 ;
@@ -78,8 +78,8 @@ find_best_from_scripts(User_input, [Script|Rest], (IC, IK, IPI, IPR), Output, Ke
 % base case at the end of script search
 find_best_from_scripts(_, [], (IC,IK, IPI, _), IC, IK, IPI).
 
-prepare_new_uninformed_comment(Keyword, Pattern_index) :-
-        Keyword = memory ->
-        remove_head_memory_list
-        ;
-        assert_next_action(Keyword, Pattern_index),!.
+prepare_new_comment(Keyword, Pattern_index) :-
+    Keyword = memory ->
+    remove_head_memory_list
+    ;
+    assert_next_action(Keyword, Pattern_index),!.
