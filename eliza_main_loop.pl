@@ -41,7 +41,7 @@ get_comment(User_input, Output) :-
     
 get_comment_(_, [], Output, Keyword, Pattern_index) :-
     get_initial_uninformed_memory_comment(Output, Keyword, Pattern_index, _),!;
-    get_initial_uninformed_comment(Output, Keyword, Pattern_index, _).
+    get_initial_uninformed_comment(Output, Keyword, Pattern_index, _), !.
 
 get_comment_(User_input, Scripts, Output, Keyword, Pattern_index) :-
     % at first we get uninformed response from Eliza
