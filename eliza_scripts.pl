@@ -23,7 +23,7 @@ get_initial_uninformed_comment(Initial_comment, none, Pattern_index, Priority) :
 
 
 % get_informed_comment(+User_input, +Script, -Comment, -Keyword, -Pattern_index)
-get_informed_comment(User_input, Script, Comment, Keyword, Pattern_index) :-
+get_informed_comment(User_input, Script, Action, Keyword, Pattern_index) :-
     % not only find pattern_index, but also 
     % unifies variables in response with user_input
     find_matching_pattern(User_input, Script, Pattern_index),
@@ -38,8 +38,7 @@ get_informed_comment(User_input, Script, Comment, Keyword, Pattern_index) :-
     % built-in
     % get nth element of Actions list and store it
     % into Action
-    nth0(Action_index, Actions, response(C)),
-    flatten(C,Comment).
+    nth0(Action_index, Actions, Action).
 
 assert_next_action(Keyword, Pattern_index) :-
     (

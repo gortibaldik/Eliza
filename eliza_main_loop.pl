@@ -35,13 +35,8 @@ get_comment(User_input, Output) :-
         match(Stemmed_lemmed, Matched),
         append_to_memory_list(Response)
         ; true
-    ),
-    (
-        Keyword = memory ->
-        remove_head_memory_list
-        ;
-        assert_next_action(Keyword, Pattern_index),!
-    ).
+    ), 
+    prepare_new_uninformed_comment(Keyword, Pattern_index).
 
     
 get_comment_(_, [], Output, Keyword, Pattern_index) :-
@@ -53,7 +48,6 @@ get_comment_(User_input, Scripts, Output, Keyword, Pattern_index) :-
     % without any knowledge of User_input
     (get_initial_uninformed_memory_comment(IC, IK, IPI,IPR), !;
     get_initial_uninformed_comment(IC, IK, IPI, IPR)),
-    nodebug,
 
     % then we traverse all the scripts to find the best
     find_best_from_scripts(User_input, Scripts, (IC, IK, IPI, IPR), Output, Keyword, Pattern_index).
@@ -61,12 +55,31 @@ get_comment_(User_input, Scripts, Output, Keyword, Pattern_index) :-
 find_best_from_scripts(User_input, [Script|Rest], (IC, IK, IPI, IPR), Output, Keyword, Pattern_index) :-
     get_script_priority(Script, Informed_priority),
     (
-        IPR > Informed_priority -> (Output = IC, Keyword = IK, Pattern_index = IPI);
-        get_informed_comment(User_input, Script, Informed_comment, Informed_Keyword, Informed_index) ->
-            find_best_from_scripts(User_input, Rest, (Informed_comment, Informed_Keyword, Informed_index, Informed_priority), Output, Keyword, Pattern_index);
+        IPR > Informed_priority -> (Output = IC, Keyword = IK, Pattern_index = IPI)
+        ;
+        get_informed_comment(User_input, Script, Action, Informed_Keyword, Informed_index) ->
+            (
+                Action = newkey ->
+                find_best_from_scripts(User_input, Rest, (IC, IK, IPI, IPR), Output, Keyword, Pattern_index)
+                ;
+                Action = equivalence(NewKeyword) ->
+                prepare_new_uninformed_comment(Keyword, Pattern_index),
+                script_contains_keyword(NewScript, NewKeyword),
+                find_best_from_scripts(User_input, [NewScript|Rest], (IC, IK, IPI, IPR), Output, Keyword, Pattern_index)
+                ;
+                Action = response(Tmp) ->
+                flatten(Tmp, Informed_comment),!,
+                find_best_from_scripts(User_input, Rest, (Informed_comment, Informed_Keyword, Informed_index, Informed_priority), Output, Keyword, Pattern_index)
+            )
+        ;
         find_best_from_scripts(User_input, Rest, (IC, IK, IPI, IPR), Output, Keyword, Pattern_index)
     ).
 
 % base case at the end of script search
 find_best_from_scripts(_, [], (IC,IK, IPI, _), IC, IK, IPI).
 
+prepare_new_uninformed_comment(Keyword, Pattern_index) :-
+        Keyword = memory ->
+        remove_head_memory_list
+        ;
+        assert_next_action(Keyword, Pattern_index),!.

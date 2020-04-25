@@ -17,7 +17,8 @@ append_to_memory_list(Response) :-
     memory(Old),
     append(Old, [Response], New), 
     retract(memory(Old)),
-    asserta(memory(New)).
+    asserta(memory(New)),
+    !.
 
 % remove first question from the list
 remove_head_memory_list :-
