@@ -192,7 +192,7 @@ quit_script([dakujem, za, podnetny, rozhovor, '.', dufam, ',', ze, sa, este, nie
 
 
 
-% none_script, called if Eliza hadn't understood what's going on
+% 'none' script, called if Eliza hadn't understood what's going on
 none_script(
     script(
         keyword(none, 0),
@@ -209,7 +209,7 @@ none_script(
     )
 ).
 
-% sorry_script, called after detection of word sorry - "prepac"
+% 'sorry' script, called after detection of word sorry - "prepac"
 scripts(
     script(
         keyword(prepac, 0),
@@ -227,7 +227,7 @@ scripts(
     )
 ).
 
-% if_script, called after detection of word if - "ak"
+% 'if' script, called after detection of word if - "ak"
 scripts(
     script(
         keyword(ak, 4),
@@ -253,6 +253,7 @@ scripts(
     )
 ).
 
+% 'your' script
 scripts(
     script(
         keyword(vas, 3),
@@ -279,6 +280,7 @@ scripts(
     )
 ).
 
+% 'family' script
 scripts(Script) :-
     family(Family), 
     Script = script(
@@ -297,6 +299,7 @@ scripts(Script) :-
         ]
      ).
 
+% 'everybody' script
 scripts(Script) :-
     everybody(Everybody), 
     Script = script(
@@ -318,7 +321,7 @@ scripts(Script) :-
         ]
     ).
 
-
+% 'what' script
 scripts(
     script(
         keyword(co, 0),
