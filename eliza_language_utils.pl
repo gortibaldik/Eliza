@@ -7,8 +7,9 @@ punctuation('?').
 punctuation(';').
 
 lemm_([o,s,p,r,a,v,e|_], "prepac") :- !. 
-lemm_([s,o,m], "si") :- !.
-lemm_([m,i], "ti") :- !.
+lemm_([s,o,m], "ste") :- !.
+lemm_([m,o,j|X], [v,a,s|X]) :- !.
+lemm_([m,i], "vam") :- !.
 lemm_(X,X).
 
 stem_([p,r,e,p,a,c|_], "prepac") :-!.

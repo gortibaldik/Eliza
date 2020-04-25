@@ -118,34 +118,32 @@ find_matching_pattern_(User_input, [Pattern|Rest], I, Pattern_index) :-
     ).
 
 % match(+User_input, +Pattern)
-match(User_input, [Pattern_head|Pattern_tail]) :-
-    var(Pattern_head) -> match_variable(User_input, Pattern_tail, Pattern_head, [], Rest_of_input, Rest_of_pattern), match(Rest_of_input, Rest_of_pattern);
-    User_input = [Pattern_head|Ui_tail], match(Ui_tail, Pattern_tail).
+match(_, []) :-!.
 
-match([], []).
+match(Input, [VarHead|Pattern_tail]) :-
+    var(VarHead), !,
+    match_var(Input, Pattern_tail, VarHead, Rest, Pattern_rest),
+    match(Rest, Pattern_rest).
 
-% match_variable(+User_input, +Pattern, +Pattern_head, +Acc, -Rest_of_input, -Rest_of_pattern)
-match_variable(User_input, [Pat_head|Pat_tail], Var, Acc, User_input, [Pat_head|Pat_tail]) :-
-    var(Pat_head),!, reverse(Acc, Var).
+match([Head|Tail], [Head|Pattern_tail]) :-
+    match(Tail, Pattern_tail).
 
-match_variable([Inp_head|Inp_tail], [Inp_head|Pat_tail], Var, Acc, Rest_of_input, Rest_of_pattern) :-
-    !,consume_not_var(Inp_tail, Pat_tail, Rest_of_input, Rest_of_pattern),
-    reverse(Acc, Var).
-
-match_variable([Inp_head|Inp_tail], Pattern, Var, Acc, Rest_of_input, Rest_of_pattern) :-
-    !,match_variable(Inp_tail, Pattern, Var, [Inp_head| Acc], Rest_of_input, Rest_of_pattern).
-
-match_variable(User_input, [], Var, Acc, [], []) :-
-    reverse(Acc, Reversed), 
-    append(Reversed, User_input, Var).
-
-consume_not_var([], [], [], []).
-
-consume_not_var(User_input, [Pattern_head| Pattern_tail], User_input, [Pattern_head| Pattern_tail]) :-
+% match_var(+Input, +Pattern, -Var, -Rest_of_input, -Rest_of_pattern)
+%   match input to pattern until pattern and input head aren't 
+%   the same or until you won't meet another variable
+%   assign the result to Var
+match_var([_|Rest], [Pattern_head|Pattern_rest], [], Rest, Pattern_rest) :-
     var(Pattern_head), !.
 
-consume_not_var([Inp_head|Inp_tail], [Inp_head|Pat_tail], Rest_of_input, Rest_of_pattern) :-
-    consume_not_var(Inp_tail, Pat_tail, Rest_of_input, Rest_of_pattern).
+match_var([Head|Rest], [Head|Pattern_rest], [], Rest, Pattern_rest) :-!.
+
+
+% implicitly Pattern doesn't have same head
+% as Input to be matched.
+match_var([Head|Tail], Pattern, [Head|VarRest], Rest, Pattern_rest) :-
+    match_var(Tail, Pattern, VarRest, Rest, Pattern_rest),!.
+
+match_var(_, [], [], [], []).
 
 
 % we use memory_current_action as a predicate 
@@ -222,7 +220,8 @@ scripts(
             pattern(
                 matched([_, ak, by,si, Y]),
                 actions([
-                    response([co, by, sa, stalo, ak, by, som, Y]),
+                    response([myslite, ',', ze, je, pravdepodobne,',', ze, by, som, Y, '?']),
+                    response([co, by, sa, stalo, ak, by, som, Y, '?']),
                     response([dufas, ze, by, som, Y, '?']),
                     response([naozaj, si, myslis, ',', ze, by, som, Y, '?'])
                 ])
@@ -230,8 +229,8 @@ scripts(
             pattern(
                 matched([_, ak, by, som, Y]),
                 actions([
-                    response([co, by, sa, stalo, ak, by, si, Y, '?']),
-                    response([dufas, ',', ze, by, si, Y, '?'])
+                    response([co, by, sa, stalo, ak, by, ste, Y, '?']),
+                    response([dufate, ',', ze, by, ste, Y, '?'])
                 ])
             )
         ]
