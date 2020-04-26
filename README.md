@@ -78,3 +78,13 @@ __Approaches__ :
   - ##### Problems :
 
     - recognition of grammatical genders in grammatical cases different from nominative
+    
+  - ##### TODO :
+
+    - resolve issue with different meanings of different declinations
+
+      ​	```> sestre nedochadza, že to nie je pravda``` (she doesn't realize that it isn't true)
+
+      ​	```je este niekto vo vasej rodine, kto nedochadza, že to nie je pravda ?```  (is there anybody else in your family, who... (not translatable))
+
+    - the correct answer would be : ```je este niekto vo vasej rodine, komu nedochadza, že to nie je pravda ?``` (is there anybody else in your family, who doesn't realize that it isn't true ?)
