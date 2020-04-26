@@ -68,8 +68,11 @@ __Approaches__ :
   - ```family``` keyword and ```family_masculine``` and ```family_feminine``` declination handling - this means that there are 2 possible ```adjective declinations``` . Example of communication :
 
     ​		```> otec nevie programovat``` (my father can't code)
+
     ​		``` Vas otec?``` (your father ?) <= in masculine
+
     ​		```> ani mama nevie programovat``` (my mother neither)
+
     ​		```Vasa mama ?```  (your mather ?) <= in feminine
 
   - ##### Problems :
