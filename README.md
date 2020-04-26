@@ -39,7 +39,7 @@ My implementation of Eliza is hugely inspired by works of @bartosz-witkowski . I
 __Problems__ :
 
 - when an English person talks about a member of his family he says ```my family member```. In Slovak there isn't any such convention, so Slovak talks about ```sister```, with meaning ```my sister```. Therefore I've introduced the ```family script``` called after detection of any family member. 
-- in Slovak we distinct 3 grammatical genders : feminine, masculine and neuter
+- in Slovak there are 3 grammatical genders : feminine, masculine and neuter
   - it means that we use different declinations of adjectives with words ( ```father```, ```brother``` ) and with words ( ```mother```, ```sister``` )
 
 __Approaches__ :
