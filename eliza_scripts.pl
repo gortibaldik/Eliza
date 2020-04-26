@@ -259,7 +259,17 @@ scripts(
         keyword(vas, 3),
         [
             pattern(
-                matched([_, vas, _, class(family_declined, F), X]),
+                matched([_, vas, _, class(family_masculine, F), X]),
+                actions([
+                    response([povedzte, mi, viac, o, vasej, rodine, '!']),
+                    response([je, este, niekto, vo, vasej, rodine, kto, X, '?']),
+                    response([myslite, vazne, ',', ked, hovorite, ',', ze, F, X, '?']),
+                    response([F,'?']),
+                    response([co, vam, este, prichadza, na, mysel, ',', ked, hovorite, ':', '\"', F, X, '\"'])
+                ])
+            ),
+            pattern(
+                matched([_, vas, _, class(family_feminine, F), X]),
                 actions([
                     response([povedzte, mi, viac, o, vasej, rodine, '!']),
                     response([je, este, niekto, vo, vasej, rodine, kto, X, '?']),
@@ -281,23 +291,33 @@ scripts(
 ).
 
 % 'family' script
-scripts(Script) :-
-    family(Family), 
-    Script = script(
-        keyword(Family, 2),
+scripts(
+    script(
+        keyword(family, 2),
         [
             pattern(
-                matched([_, class(family_declined, F), X]),
+                matched([_, class(family_feminine, F), X]),
                 actions([
+                    response([vasa, F,'?']),
                     response([povedzte, mi, viac, o, vasej, rodine, '!']),
                     response([je, este, niekto, vo, vasej, rodine, kto, X, '?']),
                     response([myslite, vazne, ',', ked, hovorite, ',', ze, F, X, '?']),
-                    response([F,'?']),
+                    response([co, vam, este, prichadza, na, mysel, ',', ked, hovorite, ':', '\"', F, X, '\"'])
+                ])
+            ),
+            pattern(
+                matched([_, class(family_masculine, F), X]),
+                actions([
+                    response([vas, F,'?']),
+                    response([povedzte, mi, viac, o, vasej, rodine, '!']),
+                    response([je, este, niekto, vo, vasej, rodine, kto, X, '?']),
+                    response([myslite, vazne, ',', ked, hovorite, ',', ze, F, X, '?']),
                     response([co, vam, este, prichadza, na, mysel, ',', ked, hovorite, ':', '\"', F, X, '\"'])
                 ])
             )
         ]
-     ).
+    )
+).
 
 % 'everybody' script
 scripts(Script) :-

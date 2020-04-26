@@ -45,6 +45,15 @@ no_declination(ak).
 
 conditional_lemm([p,r,e,p,a,c|_], [p,r,e,p,a,c]) :- !.
 conditional_lemm([o,s,p,r,a,v,e|_], [p,r,e,p,a,c]) :- !.
+conditional_lemm([b,r,a,t|_], [f,a,m,i,l,y]) :- !.
+conditional_lemm([s,e,s,t,r|_], [f,a,m,i,l,y]) :- !.
+conditional_lemm([o,t,e,c|_], [f,a,m,i,l,y]) :- !.
+conditional_lemm([o,t,c|_], [f,a,m,i,l,y]) :- !.
+conditional_lemm([m,a,m|_], [f,a,m,i,l,y]) :-!.
+conditional_lemm([s,e,s,t,e,r,n,i,c|_], [f,a,m,i,l,y]) :- !.
+conditional_lemm([b,r,a,t,r,a,n|_], [f,a,m,i,l,y]) :- !.
+conditional_lemm([s,t,r,y,k|_], [f,a,m,i,l,y]) :- !.
+conditional_lemm([t,e,t|_], [f,a,m,i,l,y]) :- !.
 conditional_lemm(X,X).
 % is_declination(+X, +Y)
 %   returns true if X is declination of Y
@@ -65,29 +74,24 @@ member_declined(Word, [Input_Head|_]) :-
 member_declined(Word, [_| Input_rest]) :-
     member_declined(Word, Input_rest).
 
-family(brat).
-family(sestr).
-family(otec).
-family(otc).
-family(mam).
-family(sesternic).
-family(bratran).
-family(stryk).
-family(tet).
-
 % force at least 1 char after base of declination
-family_declined_([b,r,a,t|[_|_]]).
-family_declined_([s,e,s,t,r|[_|_]]).
-family_declined_([o,t,c|[_|_]]).
-family_declined_([m,a,m|[_|_]]).
-family_declined_([s,t,r,y,k|[_|_]]).
-family_declined_([t,e,t|[_|_]]).
-family_declined_([s,e,s,t,e,r,n,i,c|[_|_]]).
-family_declined_([b,r,a,t,r,a,n|[_|_]]).
+family_feminine_([m,a,m|[_|_]]).
+family_feminine_([s,e,s,t,r|[_|_]]).
+family_feminine_([t,e,t|[_|_]]).
+family_feminine_([s,e,s,t,e,r,n,i,c|[_|_]]).
+family_masculine_([b,r,a,t|[_|_]]).
+family_masculine_([o,t,c|[_|_]]).
+family_masculine_([o,t,e,c]).
+family_masculine_([s,t,r,y,k|[_|_]]).
+family_masculine_([b,r,a,t,r,a,n|[_|_]]).
 
-family_declined(X) :-
+family_feminine(X) :-
     atom_chars(X, Chars),
-    family_declined_(Chars).
+    family_feminine_(Chars).
+
+family_masculine(X) :-
+    atom_chars(X, Chars),
+    family_masculine_(Chars).
 
 everybody(vsetci).
 everybody(nikto).
