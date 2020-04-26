@@ -79,6 +79,7 @@ family_feminine_([m,a,m|[_|_]]).
 family_feminine_([s,e,s,t,r|[_|_]]).
 family_feminine_([t,e,t|[_|_]]).
 family_feminine_([s,e,s,t,e,r,n,i,c|[_|_]]).
+
 family_masculine_([b,r,a,t|[_|_]]).
 family_masculine_([o,t,c|[_|_]]).
 family_masculine_([o,t,e,c]).
