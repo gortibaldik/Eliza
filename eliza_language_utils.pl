@@ -13,8 +13,6 @@ lemm_([p,a,m,a,t,a,s], [p,a,m,a,t,a,m]) :- !.
 lemm_([p,a,m,a,t,a,t,e], [p,a,m,a,t,a,m]) :- !.
 lemm_([p,a,m,a,t,a,m], [p,a,m,a,t,a,t,e]) :- !.
 
-lemm_([o,s,p,r,a,v,e|_], "prepac") :- !. 
-
 
 lemm_([s,o,m], "ste") :- !.
 lemm_([s,t,e], "som") :- !.
@@ -26,6 +24,8 @@ lemm_(X,X).
 
 stem_([p,r,e,p,a,c|_], "prepac") :-!.
 stem_(X,X).
+
+
 
 stem_lemm(Atom, Stemmed) :-
     atom_chars(Atom, Chars),
@@ -40,7 +40,12 @@ traverse_input_stem_lemm([Word|Rest], [Result| ResultRest]) :-
 traverse_input_stem_lemm([],[]).
 
 
+% --- keyword matching ---
 no_declination(ak).
+
+conditional_lemm([p,r,e,p,a,c|_], [p,r,e,p,a,c]) :- !.
+conditional_lemm([o,s,p,r,a,v,e|_], [p,r,e,p,a,c]) :- !.
+conditional_lemm(X,X).
 % is_declination(+X, +Y)
 %   returns true if X is declination of Y
 %   we need not decline words like "ak" -> "ako"
@@ -49,7 +54,8 @@ is_declination(X, Y) :-
     \+no_declination(Y),
     atom_chars(X, CharsX), 
     atom_chars(Y, CharsY),
-    append(CharsY, _, CharsX).
+    (append(CharsY, _, CharsX) -> true;
+    conditional_lemm(CharsX, CharsY)).
 
 member_declined(Word, [Word|_]) :-!.
 
