@@ -1,6 +1,6 @@
 # Lemmatization and stemming
 
-- its considerably harder to detect keywords in Slovak than in English mainly because of declinations of nouns and conjugation of verbs
+- its considerably harder to detect keywords in Slovak than in English mainly because of declension of nouns and conjugation of verbs
 
 The scripts below are examples of transformations applied to input text.
 
@@ -40,7 +40,7 @@ __Problems__ :
 
 - when an English person talks about a member of his family he says ```my family member```. In Slovak there isn't any such convention, so Slovak talks about ```sister```, with meaning ```my sister```. Therefore I've introduced the ```family script``` called after detection of any family member. 
 - in Slovak there are 3 grammatical genders : feminine, masculine and neuter
-  - it means that we use different declinations of adjectives with words ( ```father```, ```brother``` ) and with words ( ```mother```, ```sister``` )
+  - it means that we use different declensions of adjectives with words ( ```father```, ```brother``` ) and with words ( ```mother```, ```sister``` )
 
 __Approaches__ :
 
@@ -79,12 +79,24 @@ __Approaches__ :
 
     - recognition of grammatical genders in grammatical cases different from nominative
     
-  - ##### TODO :
 
-    - resolve issue with different meanings of different declinations
+- #### Forth approach :
 
-      ​	```> sestre nedochadza, že to nie je pravda``` (she doesn't realize that it isn't true)
+  - introduction of check of grammatical cases in ```eliza_language_utils.pl```, after detection of any ```family member``` we also detect its grammatical case with aid of ```gram_case_masculine_sg``` and ```gram_case_feminine_sg```
 
-      ​	```je este niekto vo vasej rodine, kto nedochadza, že to nie je pravda ?```  (is there anybody else in your family, who... (not translatable))
+  - introduction of patterns handling matched grammatical cases through ```class(family_feminine, Word, Case)``` and ```class(family_masculine, Word, Case)``` 
 
-    - the correct answer would be : ```je este niekto vo vasej rodine, komu nedochadza, že to nie je pravda ?``` (is there anybody else in your family, who doesn't realize that it isn't true ?)
+  - many times we need to force presence of another word after the keyword -> introduction of ```class(atom, X)``` to be able to query appropriately 
+
+  - This is the final approach with following results :
+
+    - ```> sestre nedochadza, ze to nie je pravda``` (my sister doesn't realize that it isn't true)
+- ```Je este niekto vo vasej rodine komu nedochadza, ze to nie je pravda?``` (is there anybody else in your family, who doesn't realize that it isn't true ?)
+    - ```> s mojou mamkou sme sa dneska ucili molove stupnice``` (Today we were practicing minor scales with my mother.)
+- ```> Rozpravate sa casto s mamkou?``` (Do you speak often with your mother ?)
+
+
+
+TODO : general handling of ```masculine```, ```feminine``` and ```neuter``` grammatical genders
+
+TODO : general handling of conjugation 
