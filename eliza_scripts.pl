@@ -132,6 +132,15 @@ match([Head|Tail], [Head|Pattern_tail]) :-
 match([Head|Tail], [class(C, Head)|Pattern_tail]) :-
     call(C, Head), match(Tail, Pattern_tail).
 
+match([Head|Tail], [class(C, Head, Argument)|Pattern_tail]) :-
+    call(C, Head,Argument), match(Tail, Pattern_tail).
+
+match([DeclinedHead|Tail], [Head|Pattern_tail]) :-
+    Head \= class(_,_),
+    Head \= class(_,_,_),
+    is_declination(DeclinedHead, Head), 
+    match(Tail, Pattern_tail).
+
 % match_var(+Input, +Pattern, -Var, -Rest_of_input, -Rest_of_pattern)
 %   match input to pattern until pattern and input head aren't 
 %   the same or until you won't meet another variable
@@ -144,12 +153,16 @@ match_var([Head|Rest], [Head|Pattern_rest], [], Rest, Pattern_rest) :-!.
 match_var([Head|Rest], [class(C, Head)|Pattern_tail], [], Rest, Pattern_tail) :-
     call(C, Head),!.
 
+match_var([Head|Rest], [class(C, Head, Argument)|Pattern_tail], [], Rest, Pattern_tail) :-
+    call(C, Head, Argument), !.
+
 % having introduced scripts with keywords from classes 
 % its not safe to call is_declination, because
 % it calls atom_chars which throws exception on variables
 % therefore we have to check, if Head isn't in form of class(class_name, Variable)
 match_var([DeclinedHead|Rest], [Head|Pattern_rest], [], Rest, Pattern_rest) :-
     Head \= class(_,_),
+    Head \= class(_,_,_),
     is_declination(DeclinedHead, Head), !.
 
 
@@ -259,23 +272,15 @@ scripts(
         keyword(vas, 3),
         [
             pattern(
-                matched([_, vas, _, class(family_masculine, F), X]),
+                matched([_, vas, _, class(family_masculine, F, _), X]),
                 actions([
-                    response([povedzte, mi, viac, o, vasej, rodine, '!']),
-                    response([je, este, niekto, vo, vasej, rodine, kto, X, '?']),
-                    response([myslite, vazne, ',', ked, hovorite, ',', ze, F, X, '?']),
-                    response([F,'?']),
-                    response([co, vam, este, prichadza, na, mysel, ',', ked, hovorite, ':', '\"', F, X, '\"'])
+                    equivalence(family)
                 ])
             ),
             pattern(
-                matched([_, vas, _, class(family_feminine, F), X]),
+                matched([_, vas, _, class(family_feminine, F,_), X]),
                 actions([
-                    response([povedzte, mi, viac, o, vasej, rodine, '!']),
-                    response([je, este, niekto, vo, vasej, rodine, kto, X, '?']),
-                    response([myslite, vazne, ',', ked, hovorite, ',', ze, F, X, '?']),
-                    response([F,'?']),
-                    response([co, vam, este, prichadza, na, mysel, ',', ked, hovorite, ':', '\"', F, X, '\"'])
+                    equivalence(family)
                 ])
             ),
             pattern(
@@ -293,20 +298,115 @@ scripts(
 % 'family' script
 scripts(
     script(
-        keyword(family, 2),
+        keyword(family, 3),
         [
             pattern(
-                matched([_, class(family_feminine, F), X]),
+                matched([_, class(family_feminine, F, n), X]),
                 actions([
                     response([vasa, F,'?']),
                     response([povedzte, mi, viac, o, vasej, rodine, '!']),
+                    response([ked, hovorite, ',', ze, vasa, F, X, ',', co, tym, myslite, '?']),
                     response([je, este, niekto, vo, vasej, rodine, kto, X, '?']),
-                    response([myslite, vazne, ',', ked, hovorite, ',', ze, F, X, '?']),
-                    response([co, vam, este, prichadza, na, mysel, ',', ked, hovorite, ':', '\"', F, X, '\"'])
+                    response([myslite, vazne, ',', ked, hovorite, ',', ze, F, X, '?'])
                 ])
             ),
             pattern(
-                matched([_, class(family_masculine, F), X]),
+                matched([_, class(family_feminine, F, g), X]),
+                actions([
+                    response([viete, si, predstavit, zivot, bez, F, '?']), 
+                    response([bez, vetra, sa, ani, listok, nepohne, '.','.','.']),
+                    response([co, ocakavate, od, vasej, F, '?'])
+                ])
+            ),
+            pattern(
+                matched([_, o, class(family_feminine, F, l), X]),
+                actions([
+                    response([co, si, myslite, o, vasej, F, '?']),
+                    response([co, pekne, vam, napada, ',', ked, rozpravate, o, vasej, F, '?']),
+                    response([o, F, X, '?']), 
+                    response([je, este, niekto, ',', koho, poznate, o, kom,viete, ',', X, '?'])
+                ])
+            ),
+            pattern(
+                matched([_, o,class(possessive, P), class(family_feminine, F, l), X]),
+                actions([
+                    response([co, si, myslite, o, P, F, '?']),
+                    response([co, pekne, vam, napada, ',', ked, rozpravate, o, P, F, '?']),
+                    response([o, P, F, X, '?']), 
+                    response([je, este, niekto, ',', koho, poznate, o, kom, X, '?'])
+                ])
+            ),
+            pattern(
+                matched([_, class(family_feminine, F, d), class(atom, S), X]),
+                actions([
+                    response([je, este, niekto, vo, vasej, rodine, komu,S, X,'?']),
+                    response([aky, je, podla, vas, dovod, preco, F,S, X,'?']),
+                    response([F,'?']),
+                    response([preco, rozmyslate, o, F, '?'])
+                ])
+            ),
+            pattern(
+                matched([_, class(family_feminine, F, d), X]),
+                actions([
+                    response([F,'?']),
+                    response([preco, rozmyslate, o, F, '?'])
+                ])
+            ),
+            pattern(
+                matched([_, class(family_feminine, F, i), X]),
+                actions([
+                    response([rozpravate, sa, casto, s, F, '?']),
+                    response([nikdy, som, nemohla, byt, s, F, som, totiz, program, a, teda, ju, nemam])
+                ])
+            ),
+            pattern(
+                matched([_, class(family_feminine, F, a), X]),
+                actions([
+                    response([vasu, F, '?']),
+                    response([skuste, si, predstavit, vasu, F, v, lepsom, svetle,'!'])
+                ])
+            ),
+            pattern(
+                matched([_, class(family_masculine, F, ga), X]),
+                actions([
+                    response([viete, si, predstavit, zivot, bez, F, '?']), 
+                    response([co, ocakavate, od, vasho, F, '?']),
+                    response([skuste, si, predstavit, vasho, F, v, lepsom, svetle,'!'])
+                ])
+            ),
+            pattern(
+                matched([_,o, class(family_masculine, F, dl), class(atom, A), X]),
+                actions([
+                    response([je, este, niekto, ',', koho, poznate, o, kom, A, X, '?']),
+                    response([co, si, myslite, o, vasom, F, '?']),
+                    response([co, pekne, vam, napada, ',', ked, rozpravate, o, vasom, F, '?'])
+                ])
+            ),
+            pattern(
+                matched([_, class(family_masculine, F, dl), class(atom, A), X]),
+                actions([
+                    response([je, este, niekto, ',', koho, poznate, komu,A, X, '?']),
+                    response([co, si, myslite, o, vasom, F, '?']),
+                    response([co, pekne, vam, napada, ',', ked, rozpravate, o, vasom, F, '?'])
+                ])
+            ),
+            pattern(
+                matched([_, class(family_masculine, F, dl), X]),
+                actions([
+                    response([preco, rozmyslate, o, F, '?']),
+                    response([co, si, myslite, o, vasom, F, '?']),
+                    response([co, pekne, vam, napada, ',', ked, rozpravate, o, vasom, F, '?'])
+                ])
+            ),
+            pattern(
+                matched([_, class(family_masculine, F, i), X]),
+                actions([
+                    response([rozpravate, sa, casto, s, F, '?']),
+                    response([nikdy, som, nemohla, byt, s, F, som, totiz, program, a, teda, ho, nemam])
+                ])
+            ),
+            pattern(
+                matched([_, class(family_masculine, F, n), X]),
                 actions([
                     response([vas, F,'?']),
                     response([povedzte, mi, viac, o, vasej, rodine, '!']),
