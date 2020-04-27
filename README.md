@@ -91,9 +91,9 @@ __Approaches__ :
   - This is the final approach with following results :
 
     - ```> sestre nedochadza, ze to nie je pravda``` (my sister doesn't realize that it isn't true)
-- ```Je este niekto vo vasej rodine komu nedochadza, ze to nie je pravda?``` (is there anybody else in your family, who doesn't realize that it isn't true ?)
+    - ```Je este niekto vo vasej rodine komu nedochadza, ze to nie je pravda?``` (is there anybody else in your family, who doesn't realize that it isn't true ?)
     - ```> s mojou mamkou sme sa dneska ucili molove stupnice``` (Today we were practicing minor scales with my mother.)
-- ```> Rozpravate sa casto s mamkou?``` (Do you speak often with your mother ?)
+    - ```> Rozpravate sa casto s mamkou?``` (Do you speak often with your mother ?)
 
 
 
