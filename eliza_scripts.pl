@@ -832,7 +832,31 @@ scripts(
     )
 ).
 
-
+% 'want' script
+scripts(
+    script(
+        keyword(chciet, 1),
+        [
+            pattern(
+                matched([_, class(want, _, pl2, _), class(conj, A,neuter,neuter),X]),
+                actions([
+                    response([co, by, to, znamenalo, ak, by, ste, mohli, A,X, ?]),
+                    response([predpokladate, ',', ze, sa, vam, podari, A, X, '?']),
+                    response([co, ak, by, sa, vam, nikdy, nepodarilo, A, X, '?']),
+                    response([co, ma, fakt, ',', ze, chcete, A, X, s, touto, diskusiou, ?])
+                ])
+            ),
+            pattern(
+                matched([_, class(want, _, pl2, _), class(atom, A),X]),
+                actions([
+                    response([preco, chcete, A, X, '?']),
+                    response([predpokladate, ',', ze, sa, vam, podari,dosiahnut, A, X, '?']),
+                    response([co, ma, fakt, ',', ze, chcete, A, X, s, touto, diskusiou, ?])
+                ])
+            )
+        ]
+    )
+).
 
 halve(L,A,B) :- halve_(L,L,A,B).
 

@@ -30,7 +30,7 @@ transform(X,Y) :-
 transform([m,o,j|X], [v,a,s|X]) :- !.
 transform([n,a,s|X], [v,a,s|X]) :- !.
 transform([m,i], "vam") :- !.
-transform([t,i], "mi") :-!
+transform([t,i], "mi") :-!.
 transform([t,v,o,j|X], [m,o,j|X]) :-!.
 transform([v,a,s|X], [m,o,j|X]) :-!.
 transform(X,X).
@@ -107,7 +107,7 @@ conditional_lemm([m,o,z,_,_], [m,o,c,t]) :-!.
 conditional_lemm([m,o,z,_], [m,o,c,t]) :-!.
 conditional_lemm([m,o,z,e,_,e], [m,o,c,t]) :-!.
 conditional_lemm([m,i], [j,a]) :- !.
-conditional_lemm()
+conditional_lemm([c,h,c|_], [c,h,c,i,e,t]) :-!.
 conditional_lemm(X,X).
 % is_declination(+X, +Y)
 %   returns true if X is declination of Y
@@ -344,8 +344,14 @@ why_not(Atom, Number, NonNegated) :-
     atom_chars(NonNegated, NN),
     conjugation(NN, Number,_,_).
 
-% -- can script --
+% --- can script ---
 can(Atom, Number, Time) :-
     atom_chars(Atom, Chars), 
     Chars = [m,o,z|_],
+    conjugation(Chars, Number, Time, _).
+
+% --- want script ---
+want(Atom, Number, Time) :-
+    atom_chars(Atom, Chars),
+    Chars = [c,h,c|_],
     conjugation(Chars, Number, Time, _).
