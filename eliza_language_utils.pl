@@ -292,3 +292,8 @@ dream(Atom, Number, Time) :-
     atom_chars(Atom, Chars), 
     Chars = [s,n,i,v,a|_],
     conjugation(Chars, Number, Time,_).
+
+remember(Atom, Number, Time) :-
+    atom_chars(Atom,Chars),
+    Chars = [p,a,m,a,t,a|_],
+    conjugation(Chars, Number, Time, _).
