@@ -641,6 +641,7 @@ scripts(
     )
 ).
 
+% 'hello' script
 scripts(
     script(
         keyword(ahoj, 0),
@@ -658,6 +659,7 @@ scripts(
     )
 ).
 
+% 'computer' script
 scripts(
     script(
         keyword(pocitac, 50),
@@ -677,7 +679,41 @@ scripts(
     )
 ).
 
+% 'yes' script
+scripts(
+    script(
+        keyword(ano, 0),
+        [
+            pattern(
+                matched([_]),
+                actions([
+                    response([zniete, celkom, pozitivne, '!']), 
+                    response([ste, si, isty, '?']),
+                    response([vidim]),
+                    response([rozumiem])
+                ])
+            )
+        ]
+    )
+).
 
+% 'no' script
+scripts(
+    script(
+        keyword(nie, 0),
+        [
+            pattern(
+                matched([_]),
+                actions([
+                    response([hovorite, nie, len, preto, aby, ste, zneli, nastvane, ?]), 
+                    response([ste, kusok, negativny]),
+                    response([povedzte, ',', preco, nie, '?']),
+                    response([co, znamena, to, vase, '\"', nie,'\"', '?'])
+                ])
+            )
+        ]
+    )
+).
 
 halve(L,A,B) :- halve_(L,L,A,B).
 
