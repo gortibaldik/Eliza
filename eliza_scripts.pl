@@ -641,6 +641,23 @@ scripts(
     )
 ).
 
+scripts(
+    script(
+        keyword(ahoj, 0),
+        [
+            pattern(
+                matched([_]),
+                actions([
+                        response([ako, sa, mate, porozpravajte, mi, o, svojom, probleme, '!']),
+                        response([uz, sme, sa, zvitali, '!', o, com, by, ste, sa, chceli, rozpravat, '?']),
+                        response([takze, vy, sa, chcete, len, zdravit,'.','.','.']),
+                        newkey
+                ])
+            )
+        ]
+    )
+).
+
 
 
 halve(L,A,B) :- halve_(L,L,A,B).

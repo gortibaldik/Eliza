@@ -8,6 +8,7 @@ punctuation(';').
 punctuation(':').
 
 transform_([s,p,o,m,i,n,a|X], [p,a,m,a,t,a|X]) :-!.
+transform_([c,a,u|X], [a,h,o,j|X]) :-!.
 transform_(X,X).
 
 
@@ -38,6 +39,9 @@ stem_lemm(Atom, Stemmed) :-
     transform_(Chars, Chars_1),
     transform(Chars_1, Chars_lemm),
     atom_chars(Stemmed, Chars_lemm).
+
+traverse_input_stem_lemm([dobry, den|Rest], [ahoj|ResultRest]) :-
+    !, traverse_input_stem_lemm(Rest, ResultRest).
 
 traverse_input_stem_lemm([Word], []) :-
     punctuation(Word), !.
