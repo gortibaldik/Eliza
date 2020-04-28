@@ -108,6 +108,13 @@ conditional_lemm([m,o,z,_], [m,o,c,t]) :-!.
 conditional_lemm([m,o,z,e,_,e], [m,o,c,t]) :-!.
 conditional_lemm([m,i], [j,a]) :- !.
 conditional_lemm([c,h,c|_], [c,h,c,i,e,t]) :-!.
+conditional_lemm([s,m,u,t,n,_], [s,m,u,t,n,y]) :-!.
+conditional_lemm([z,a,r,m,u,t,e,n,_], [s,m,u,t,n,y]) :-!.
+conditional_lemm([n,e,s,t,a,s,t,n,_], [s,m,u,t,n,y]) :-!.
+conditional_lemm([z,u,f,a,l,_], [s,m,u,t,n,y]) :-!.
+conditional_lemm([v,e,s,e,l,_], [s,t,a,s,t,n,y]) :-!.
+conditional_lemm([n,a,d,s,e,n,_], [s,t,a,s,t,n,y]) :-!.
+conditional_lemm([n,a,t,e,s,e,n,_], [s,t,a,s,t,n,y]) :-!.
 conditional_lemm(X,X).
 % is_declination(+X, +Y)
 %   returns true if X is declination of Y
@@ -355,3 +362,13 @@ want(Atom, Number, Time) :-
     atom_chars(Atom, Chars),
     Chars = [c,h,c|_],
     conjugation(Chars, Number, Time, _).
+
+% --- sad script ---
+sad(Atom) :-
+    atom_chars(Atom, Chars),
+    conditional_lemm(Chars, [s,m,u,t,n,y]).
+
+% --- happy script ---
+happy(Atom) :-
+    atom_chars(Atom, Chars),
+    conditional_lemm(Chars, [s,t,a,s,t,n,y]).
