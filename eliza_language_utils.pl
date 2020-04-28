@@ -57,6 +57,7 @@ traverse_input_stem_lemm([],[]).
 % --- keyword matching ---
 % used only in keyword matching phase
 no_declination(ak).
+no_declination(nie).
 
 conditional_lemm([p,r,e,p,a,c|_], [p,r,e,p,a,c]) :- !.
 conditional_lemm([o,s,p,r,a,v,e|_], [p,r,e,p,a,c]) :- !.
@@ -93,6 +94,9 @@ conditional_lemm([l,a,p,t,o,p|_], [p,o,c,i,t,a,c]) :-!.
 conditional_lemm([n,o,t,a,s|_], [p,o,c,i,t,a,c]) :-!.
 conditional_lemm([h,e,j], [a,n,o]) :-!.
 conditional_lemm([n,e], [n,i,e]) :-!.
+conditional_lemm([k,e,d,z,e], [p,r,e,t,o,z,e]) :- !.
+conditional_lemm([l,e,b,o], [p,r,e,t,o,z,e]) :-!.
+conditional_lemm([p,r,e,t,o], [p,r,e,t,o,z,e]) :-!.
 conditional_lemm(X,X).
 % is_declination(+X, +Y)
 %   returns true if X is declination of Y
@@ -316,3 +320,15 @@ remember(Atom, Number, Time) :-
     atom_chars(Atom,Chars),
     Chars = [p,a,m,a,t,a|_],
     conjugation(Chars, Number, Time, _).
+
+% --- why script ---
+
+% why_not(+Atom, -Number, -NonNegated)
+%   finds if Atom is verb starting with 
+%   "ne" (the way how verbs are negated in Slovak)
+%   returns its conjugation and nonNegated form
+why_not(Atom, Number, NonNegated) :-
+    atom_chars(Atom, Chars), 
+    append([n,e], NN, Chars),
+    atom_chars(NonNegated, NN),
+    conjugation(NN, Number,_,_).

@@ -715,6 +715,51 @@ scripts(
     )
 ).
 
+% 'because' script
+scripts(
+    script(
+        keyword(pretoze, 0),
+        [
+            pattern(
+                matched([_]),
+                actions([
+                    response([je, to, ozajstny, dovod, '?', porozpravajte, mi, o, inych, pricinach, '!']), 
+                    response([neprichadzaju, vam, na, um, ine, dovody, ?]), 
+                    response([nevysvetluje, to, aj, nieco, ine, ?]),
+                    response([mozu, za, tym, byt, aj, ine, dovody, ?])
+                ])
+            )
+        ]
+    )
+).
+
+% 'why' script
+scripts(
+    script(
+        keyword(preco, 0),
+        [
+            pattern(
+                matched([_, preco, class(why_not, Verb, sg1, NonNegated), X]),
+                actions([
+                    response([myslite, si, ze, Verb, X, ?]), 
+                    response([NonNegated,len, o, tom, neviete]),
+                    response([pre, teba, je, lepsie, ak, NonNegated, ?]),
+                    response([ja, sice, Verb, ale, co, by, si, mal, robit, ty, '?']),
+                    equivalence(co)
+                ])
+            ),
+            pattern(
+                matched([_, preco, _,class(why_not, Verb, pl2, NonNegated), X]),
+                actions([
+                    response([predstavte, si, ze, NonNegated,X,'.', co, sa, stane, '?']),
+                    response([pytate, sa, preco,'.', ja, sa, hovorim, ',', ze, vy, NonNegated, X,'!']),
+                    equivalence(co)
+                ])
+            )
+        ]
+    )
+).
+
 halve(L,A,B) :- halve_(L,L,A,B).
 
 halve_([], R, [], R). % 1.
@@ -727,8 +772,7 @@ merge([XScript|XS], [YScript|YS], R) :-
     get_script_priority(XScript, X),
     get_script_priority(YScript, Y),
     ( 
-        X @> Y -> merge(XS, [YScript|YS], S), R = [XScript|S];
-        X = Y -> merge(XS, YS, S), R = [XScript|S];
+        X @>= Y -> merge(XS, [YScript|YS], S), R = [XScript|S];
         merge([XScript|XS], YS, S), R = [YScript|S]
     ).
 
