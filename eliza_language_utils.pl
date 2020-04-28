@@ -9,9 +9,10 @@ punctuation(':').
 
 transform_([s,p,o,m,i,n,a|X], [p,a,m,a,t,a|X]) :-!.
 transform_([c,a,u|X], [a,h,o,j|X]) :-!.
+transform_([n,e], [n,i,e]) :-!.
 transform_(X,X).
 
-
+transform([j,a], [v,y]) :-!.
 transform([s,o,m], "ste") :- !.
 transform([s,i], "si") :-!.
 transform([s,t,e], "som") :- !.
@@ -29,6 +30,7 @@ transform(X,Y) :-
 transform([m,o,j|X], [v,a,s|X]) :- !.
 transform([n,a,s|X], [v,a,s|X]) :- !.
 transform([m,i], "vam") :- !.
+transform([t,i], "mi") :-!
 transform([t,v,o,j|X], [m,o,j|X]) :-!.
 transform([v,a,s|X], [m,o,j|X]) :-!.
 transform(X,X).
@@ -73,7 +75,7 @@ conditional_lemm([t,e,t|_], [f,a,m,i,l,y]) :- !.
 conditional_lemm([d,e,d|_], [f,a,m,i,l,y]) :-!.
 conditional_lemm([t,a,t,k|_], [f,a,m,i,l,y]) :-!.
 conditional_lemm([b,a,b,k|_], [f,a,m,i,l,y]) :- !.
-conditional_lemm([s, n, _], [s,e,n]) :-!.
+conditional_lemm([s,n,_], [s,e,n]) :-!.
 conditional_lemm([s,n,o,m], [s,e,n]) :-!.
 conditional_lemm([s,n,o|[_|_]], [s,e,n]) :- !.
 conditional_lemm([s,n,a,m,i], [s,e,n]) :-!.
@@ -100,6 +102,12 @@ conditional_lemm([p,r,e,t,o], [p,r,e,t,o,z,e]) :-!.
 conditional_lemm([p,o,d,o,b|_], [p,o,d,o,b,n,y]) :- !.
 conditional_lemm([o,b,d,o,b|_], [p,o,d,o,b,n,y]) :-!.
 conditional_lemm([r,o,v,n,a,k|_], [p,o,d,o,b,n,y]) :-!.
+conditional_lemm([p,r,i,p,o,m,i,n|_], [p,o,d,o,b,n,y]) :-!.
+conditional_lemm([m,o,z,_,_], [m,o,c,t]) :-!.
+conditional_lemm([m,o,z,_], [m,o,c,t]) :-!.
+conditional_lemm([m,o,z,e,_,e], [m,o,c,t]) :-!.
+conditional_lemm([m,i], [j,a]) :- !.
+conditional_lemm()
 conditional_lemm(X,X).
 % is_declination(+X, +Y)
 %   returns true if X is declination of Y
@@ -335,3 +343,9 @@ why_not(Atom, Number, NonNegated) :-
     append([n,e], NN, Chars),
     atom_chars(NonNegated, NN),
     conjugation(NN, Number,_,_).
+
+% -- can script --
+can(Atom, Number, Time) :-
+    atom_chars(Atom, Chars), 
+    Chars = [m,o,z|_],
+    conjugation(Chars, Number, Time, _).
