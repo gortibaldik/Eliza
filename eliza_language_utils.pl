@@ -16,21 +16,28 @@ lemm_([p,a,m,a,t,a,m], [p,a,m,a,t,a,t,e]) :- !.
 
 lemm_([s,o,m], "ste") :- !.
 lemm_([s,t,e], "som") :- !.
+lemm_(X, Y) :-
+    conjugation(X, sg2, now, Z),
+    append(Z, [m],Y),!.
+lemm_(X,Y) :-
+    conjugation(X, pl2, now, Z),
+    append(Z, [m],Y),!.
+lemm_(X,Y) :-
+    conjugation(X, sg1, now, Z),
+    append(Z, [t,e],Y), !.
+    
 lemm_([m,o,j|X], [v,a,s|X]) :- !.
+lemm_([n,a,s|X], [v,a,s|X]) :- !.
 lemm_([m,i], "vam") :- !.
 lemm_([t,v,o,j|X], [m,o,j|X]) :-!.
 lemm_([v,a,s|X], [m,o,j|X]) :-!.
 lemm_(X,X).
 
-stem_([p,r,e,p,a,c|_], "prepac") :-!.
-stem_(X,X).
-
 
 
 stem_lemm(Atom, Stemmed) :-
     atom_chars(Atom, Chars),
-    stem_(Chars, Chars_stem),
-    lemm_(Chars_stem, Chars_lemm),
+    lemm_(Chars, Chars_lemm),
     atom_chars(Stemmed, Chars_lemm).
 
 traverse_input_stem_lemm([Word|Rest], [Result| ResultRest]) :-
@@ -41,6 +48,7 @@ traverse_input_stem_lemm([],[]).
 
 
 % --- keyword matching ---
+% used only in keyword matching phase
 no_declination(ak).
 
 conditional_lemm([p,r,e,p,a,c|_], [p,r,e,p,a,c]) :- !.
@@ -57,6 +65,13 @@ conditional_lemm([t,e,t|_], [f,a,m,i,l,y]) :- !.
 conditional_lemm([d,e,d|_], [f,a,m,i,l,y]) :-!.
 conditional_lemm([t,a,t,k|_], [f,a,m,i,l,y]) :-!.
 conditional_lemm([b,a,b,k|_], [f,a,m,i,l,y]) :- !.
+conditional_lemm([s, n, _], [s,e,n]) :-!.
+conditional_lemm([s,n,o,m], [s,e,n]) :-!.
+conditional_lemm([s,n,o|[_|_]], [s,e,n]) :- !.
+conditional_lemm([s,n,a,m,i], [s,e,n]) :-!.
+conditional_lemm([s,n,i,v,a|_], [s,n,i,v,a,t]) :-!.
+conditional_lemm([v,s,e,t,c,i], [k,a,z,d,y]) :- !.
+conditional_lemm([n,i,k,t,o], [k,a,z,d,y]) :- !.
 conditional_lemm(X,X).
 % is_declination(+X, +Y)
 %   returns true if X is declination of Y
@@ -78,7 +93,8 @@ member_declined(Word, [_| Input_rest]) :-
     member_declined(Word, Input_rest).
 % ----
 % --- noun matching ---
-
+%   used to find out grammatical gender,
+%   conjugations and declensions 
 hard(h).
 hard(k).
 hard(g).
@@ -149,18 +165,81 @@ gram_case_masculine_sg([d,e,d,o],n) :- !.
 gram_case_masculine_sg([t,a,t,k,o],n) :- !.
 
 % ---
-% --- possessive matching ---
-possessive_([m,o,j|_]).
-possessive_([t,v,o,j|_]).
-possessive_([n,a,s|_]).
-possessive_([v,a,s|_]).
-possessive_([j,e,h,o]).
-possessive_([j,e,j]).
-possessive_([i,c,h]).
+% --- conjugations ---
+conjugation(X, neuter, neuter,Y) :-
+    append(Y, [t], X), !.
 
-possessive(X) :-
+conjugation(X, sg, past,Y) :-
+    append(Y, [l], X), !.
+
+conjugation(X, sg, past,Y) :-
+    append(Y, [a,l,C], X), !,
+    (
+        C = a;
+        C = o
+    ).
+
+conjugation(X, pl, past,Y) :-
+    append(Y, [l, i], X), !.
+
+conjugation(X, sg1,now, Y) :-
+    append(Z, [A, m], X), !, 
+    (
+        A = i, !;
+        A = e, !;
+        A = a, !;
+        A = o
+    ), append(Z, [A],Y).
+
+conjugation([s,i], sg2, now,[s]) :-!.
+conjugation(X, sg2, now,Y) :-
+    append(Z, [A, s], X),!, 
+    (
+        A = e, !;
+        A = a, !;
+        A = i
+    ), append(Z,[A],Y).
+
+conjugation(X, pl1, now,Y) :-
+    append(Y, [m,e], X), !.
+
+conjugation(X, pl2, now,Y) :-
+    append(Y, [t,e], X), !.
+
+conjugation(X, sg3, now,Y) :-
+    append(Y, [e], X), !.
+
+conjugation(X, sg3, now,Y) :-
+    append(Y, [a], X), !.
+
+conjugation(X, sg3, now,Y) :-
+    append(Y, [i], X), !.
+
+conjugation(X, pl3, now, Y) :-
+    append(Y, [u], X), !.
+
+conjugation(X, pl3, now, Y) :-
+    append(Y, [i,a], X), !.
+
+conj(X, Y, Z) :-
+    atom_chars(X, CX),
+    conjugation(CX, Y, Z,_).
+% ---
+% --- possessive matching ---
+possessive_([m,o,j|_], i).
+possessive_([t,v,o,j|_], y).
+possessive_([n,a,s|_], we).
+possessive_([v,a,s|_], y).
+possessive_([j,e,h,o], he).
+possessive_([j,e,j], she).
+possessive_([i,c,h], they).
+
+possessive(X, Person) :-
     atom_chars(X, Chars), 
-    possessive_(Chars).
+    possessive_(Chars, Person).
+
+
+% --- family_script ---
 
 % force at least 1 char after base of declination
 family_feminine_([m,a,m|[_|_]]) :-!.
@@ -190,3 +269,19 @@ family_masculine(X, Gram_case) :-
 
 everybody(vsetci).
 everybody(nikto).
+
+% --- dream script ---
+dream(Atom, Number) :-
+    atom_chars(Atom, Chars),
+    dream_(Chars, Number).
+dream_([s,e,n], sg) :-!.
+dream_([s,n,y], pl) :-!.
+dream_([s,n,_], sg) :-!.
+dream_([s,n,o|[_|_]], pl) :-!.
+dream_([s,n,o,m], sg) :-!. 
+dream_([s,n,a,m,i], pl) :-!.
+
+dream(Atom, Number, Time) :-
+    atom_chars(Atom, Chars), 
+    Chars = [s,n,i,v,a|_],
+    conjugation(Chars, Number, Time,_).
