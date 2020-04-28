@@ -894,8 +894,43 @@ scripts(
     )
 ).
 
+% 'feel' script
+scripts(
+    script(
+        keyword(citit, 1),
+        [
+            pattern(
+                matched([_, class(feel, F, pl2, _), class(reflexive, R), X]),
+                actions([
+                    response([povedzte, mi, viac, o, tychto, pocitoch]),
+                    response([ako, casto, R, F, X, '?']),
+                    response([uzivate, si,ked, R, F, X, '?']),
+                    response([aky, pocit, vam, to, pripomina, '?'])
+                ])
+            )
+        ]
+    )
+).
 
+% 'swear' script
+scripts(
+    script(
+        keyword(nadavka, 1000),
+        [
+            pattern(
+                matched([_]),
+                actions([
+                    response([poprosim, vas, nenadavajte, v, tejto, konverzacii]),
+                    response([mozno, vam, to, je, prirodzene, ',', ale, upozornujem, vas, nenadavajte, mi, tu]),
+                    response([posledny, krat, vas, ziadam, nenadavajte, mi, tu, '!']),
+                    response([chod, do, prdele, ty, drbo, '!'])
+                ])
+            )
+        ]
+    )
+).
 
+stop_eliza([chod, do, prdele, ty, drbo, '!']).
 
 halve(L,A,B) :- halve_(L,L,A,B).
 

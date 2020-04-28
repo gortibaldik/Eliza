@@ -115,6 +115,13 @@ conditional_lemm([z,u,f,a,l,_], [s,m,u,t,n,y]) :-!.
 conditional_lemm([v,e,s,e,l,_], [s,t,a,s,t,n,y]) :-!.
 conditional_lemm([n,a,d,s,e,n,_], [s,t,a,s,t,n,y]) :-!.
 conditional_lemm([n,a,t,e,s,e,n,_], [s,t,a,s,t,n,y]) :-!.
+conditional_lemm([k,o,k,o,t|_], [n,a,d,a,v,k,a]) :-!.
+conditional_lemm([k,u,r,v,a], [n,a,d,a,v,k,a]) :-!.
+conditional_lemm([d,e,b,i,l|_], [n,a,d,a,v,k,a]) :-!.
+conditional_lemm([j,e,b|_], [n,a,d,a,v,k,a]) :-!.
+conditional_lemm([s,v,i,n|_], [n,a,d,a,v,k,a]) :-!.
+conditional_lemm([p,i,c,_], [n,a,d,a,v,k,a]) :-!.
+conditional_lemm([z,o,p,a], [n,a,d,a,v,k,a]) :-!.
 conditional_lemm(X,X).
 % is_declination(+X, +Y)
 %   returns true if X is declination of Y
@@ -252,6 +259,9 @@ conjugation(X, pl2, now,Y) :-
 conjugation(X, sg3, now,Y) :-
     append(Y, [e], X), !.
 
+conjugation(X, pl3, now, Y) :-
+    append(Y, [i,a], X), !.
+
 conjugation(X, sg3, now,Y) :-
     append(Y, [a], X), !.
 
@@ -261,8 +271,6 @@ conjugation(X, sg3, now,Y) :-
 conjugation(X, pl3, now, Y) :-
     append(Y, [u], X), !.
 
-conjugation(X, pl3, now, Y) :-
-    append(Y, [i,a], X), !.
 
 conj(X, Y, Z) :-
     atom_chars(X, CX),
@@ -372,3 +380,9 @@ sad(Atom) :-
 happy(Atom) :-
     atom_chars(Atom, Chars),
     conditional_lemm(Chars, [s,t,a,s,t,n,y]).
+
+% --- feel script ---
+feel(Atom, Number, Time) :-
+    atom_chars(Atom, Chars), 
+    Chars = [c,i,t,i|_],
+    conjugation(Chars, Number, Time,_).

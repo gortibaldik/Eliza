@@ -12,7 +12,11 @@ main_prompt :-
         (
             User_input = [dovidenia] -> quit_script(Output), comment(Output), true;
             User_input = [] -> fail;
-            get_comment(User_input, Output), comment(Output), fail
+            get_comment(User_input, Output), comment(Output), 
+            (
+                stop_eliza(Output) -> true;
+                fail
+            )
         ),
     !.
 
