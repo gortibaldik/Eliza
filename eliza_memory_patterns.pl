@@ -34,8 +34,8 @@ get_random_memory_pattern(Pattern) :-
     nth0(I, Patterns, Pattern).
 
 memory_patterns([
-    memory_pattern(matched([_,vas, X]), response([podme, sa, dalej, porozpravat, ',', preco, vas, X, '!'])),
-    memory_pattern(matched([_,vas, X]), response([skor, ste, povedali, ',', ze,vas, X])),
-    memory_pattern(matched([_,vas, X]), response([preco, hovorite, ',', ze, vas, X, '?'])),
-    memory_pattern(matched([_,vas, X]), response([ma, to, nieco, docinenia, s, tym, ',', ze, vas, X, '?']))
+    memory_pattern(matched([_,class(possessive, P, y), X]), response([podme, sa, dalej, porozpravat, ',', preco, P, X, '!'])),
+    memory_pattern(matched([_,class(possessive, P, y), X]), response([skor, ste, povedali, ',', ze,P, X])),
+    memory_pattern(matched([_,class(possessive, P, y), X]), response([preco, hovorite, ',', ze, P, X, '?'])),
+    memory_pattern(matched([_,class(possessive, P, y), X]), response([ma, to, nieco, docinenia, s, tym, ',', ze, P, X, '?']))
 ]).
