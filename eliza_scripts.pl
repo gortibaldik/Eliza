@@ -752,8 +752,26 @@ scripts(
                 matched([_, preco, _,class(why_not, Verb, pl2, NonNegated), X]),
                 actions([
                     response([predstavte, si, ze, NonNegated,X,'.', co, sa, stane, '?']),
-                    response([pytate, sa, preco,'.', ja, sa, hovorim, ',', ze, vy, NonNegated, X,'!']),
+                    response([pytate, sa, preco,'.', ja, vam, hovorim, ',', ze, vy, NonNegated, X,'!']),
                     equivalence(co)
+                ])
+            )
+        ]
+    )
+).
+
+% 'always' script
+scripts(
+    script(
+        keyword(vzdy, 1),
+        [
+            pattern(
+            matched([_]),
+                actions([
+                    response([viete, vymysliet, nejaky, konkretny, priklad, ?]),
+                    response([kedy, ?]), 
+                    response([o, com, rozmyslate, ?]),
+                    response([naozaj, vzdy, ?])
                 ])
             )
         ]
