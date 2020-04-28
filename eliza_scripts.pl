@@ -766,12 +766,31 @@ scripts(
         keyword(vzdy, 1),
         [
             pattern(
-            matched([_]),
+                matched([_]),
                 actions([
                     response([viete, vymysliet, nejaky, konkretny, priklad, ?]),
                     response([kedy, ?]), 
                     response([o, com, rozmyslate, ?]),
                     response([naozaj, vzdy, ?])
+                ])
+            )
+        ]
+    )
+).
+
+% 'alike' script
+scripts(
+    script(
+        keyword(podobny, 10),
+        [
+            pattern(
+                matched([_]),
+                actions([
+                    response([akym, sposobom, ?]),
+                    response([vidite, nejake, spolocne, vlastnosti, ?]),
+                    response([ake, ine, prepojenia, tam, su, ?]),
+                    response([co, si, myslite, ze, ta, podoba, znamena, ?]),
+                    response([moze, tam, naozaj, byt, nejake, prepojenie, ?])
                 ])
             )
         ]
