@@ -97,6 +97,9 @@ __Approaches__ :
 
 
 
-TODO : general handling of ```masculine```, ```feminine``` and ```neuter``` grammatical genders
+### Conjugation
 
-TODO : general handling of conjugation 
+- predicate ```conjugation(Verb, Number, Time, Base)``` which based on ```Verb ```finds ```Number``` (```sg```,```pl```), ```Time``` (```now```, ```past```, ```neuter```)
+- basic transformations
+  -  ```sg1``` -> ```pl2``` ( when user speaks about himself, we want to ask him questions (and use polite form (that's why we don't use ```sg2``` instead of ```pl2```)))
+  - ```pl2``` -> ```sg1``` | ```sg2``` -> ```pl1``` (same reasons as above)
