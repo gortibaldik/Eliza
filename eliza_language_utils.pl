@@ -7,14 +7,8 @@ punctuation('?').
 punctuation(';').
 punctuation(':').
 
-lemm_([k,a,z,d,y], [v,s,e,t,c,i]) :-!.
-
-lemm_([p,a,m,a,t,a,s], [p,a,m,a,t,a,m]) :- !.
-lemm_([p,a,m,a,t,a,t,e], [p,a,m,a,t,a,m]) :- !.
-lemm_([p,a,m,a,t,a,m], [p,a,m,a,t,a,t,e]) :- !.
-
-
 lemm_([s,o,m], "ste") :- !.
+lemm_([s,i], "si") :-!.
 lemm_([s,t,e], "som") :- !.
 lemm_(X, Y) :-
     conjugation(X, sg2, now, Z),
@@ -39,6 +33,9 @@ stem_lemm(Atom, Stemmed) :-
     atom_chars(Atom, Chars),
     lemm_(Chars, Chars_lemm),
     atom_chars(Stemmed, Chars_lemm).
+
+traverse_input_stem_lemm([Word], []) :-
+    punctuation(Word), !.
 
 traverse_input_stem_lemm([Word|Rest], [Result| ResultRest]) :-
     stem_lemm(Word, Result),
@@ -72,6 +69,7 @@ conditional_lemm([s,n,a,m,i], [s,e,n]) :-!.
 conditional_lemm([s,n,i,v,a|_], [s,n,i,v,a,t]) :-!.
 conditional_lemm([v,s,e,t,c,i], [k,a,z,d,y]) :- !.
 conditional_lemm([n,i,k,t,o], [k,a,z,d,y]) :- !.
+conditional_lemm([p,a,m,a,t,a|_], [p,a,m,a,t,a,t]) :- !.
 conditional_lemm(X,X).
 % is_declination(+X, +Y)
 %   returns true if X is declination of Y
