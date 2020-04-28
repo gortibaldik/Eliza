@@ -254,7 +254,7 @@ scripts(
         keyword(ak, 4),
         [
             pattern(
-                matched([_, ak, by,si, Y]),
+                matched([_, ak, by,si, Y, ',', _]),
                 actions([
                     response([myslite, ',', ze, je, pravdepodobne,',', ze, by, som, Y, '?']),
                     response([co, by, sa, stalo, ak, by, som, Y, '?']),
@@ -263,7 +263,7 @@ scripts(
                 ])
             ),
             pattern(
-                matched([_, ak, by, ste, Y]),
+                matched([_, ak, by, ste, Y, ',', _]),
                 actions([
                     response([co, by, sa, stalo, ak, by, ste, Y, '?']),
                     response([dufate, ',', ze, by, ste, Y, '?']),
@@ -536,25 +536,41 @@ scripts(
 % 'remember' script
 scripts(
     script(
-        keyword(pamata,5),
+        keyword(pamatat,5),
         [
             pattern(
-                matched([_, pamatate, si, na, X]),
+                matched([_, pamatate, _, na, X]),
                 actions([
                     response([casto, myslite, na, X,'?']),
                     response([mysliac, na, X, ',', prichadza, vam, este, nieco, na, mysel, '?']),
                     response([na, co, este, si, spominate, '?']),
-                    response([preco, ste, si, spomenuli, na, X, prave, teraz, '?']),
-                    response([co, na, sucasnej, situacii, vam, pripomina, X, '?'])
+                    response([preco, ste, si, spomenuli, na, X, prave, teraz, '?'])
                 ])
             ),
             pattern(
-                matched([_,pamatam, si, na, X]),
+                matched([_,pamatam, _, na, X]),
                 actions([
                     response([myslite, ',', ze, by, som, zabudol, na, X, '?']),
                     response([preco, by, som, si, mal, spomenut, na, X, prave, teraz, '?']),
                     equivalence(co),
                     response([spominali, ste, na, X, '?'])
+                ])
+            ),
+            pattern(
+                matched([_, pamatate, class(reflexive, X), Y]),
+                actions([
+                    response([casto, spominate, Y, '?']),
+                    response([preco, vam, prislo, na, um, Y, '?']),
+                    equivalence(co), 
+                    response([co, na, sucasnej, situacii, vam, pripomina, Y, '?'])
+                ])
+            ),
+            pattern(
+                matched([_, class(remember, _, pl2, _), _,ako, X]),
+                actions([
+                    response([ako, X, '?']),
+                    response([preco, rozmyslate, ako, X, '?']),
+                    response([casto, vam, to, prichadza, na, mysel, a, spominate, ako, X, '?'])
                 ])
             ),
             pattern(
