@@ -658,6 +658,25 @@ scripts(
     )
 ).
 
+scripts(
+    script(
+        keyword(pocitac, 50),
+        [
+            pattern(
+                matched([_]),
+                actions([
+                    response([zaujimaju, vas, pocitace, ?]),
+                    response([preco, spominate, pocitace, ?]),
+                    response([ma, vas, problem, nieco, spolocne, s, vypoctovymi, technologiami, ?]),
+                    response([myslite, si, ',', ze, pocitace, mozu, pomahat, ludstvu, ?]),
+                    response([co, na, pocitacoch, vas, zaujima, ?]),
+                    response([nahradia, podla, vas, pocitace, cloveka, ?])
+                ])
+            )
+        ]
+    )
+).
+
 
 
 halve(L,A,B) :- halve_(L,L,A,B).

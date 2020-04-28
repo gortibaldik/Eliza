@@ -15,6 +15,7 @@ transform_(X,X).
 transform([s,o,m], "ste") :- !.
 transform([s,i], "si") :-!.
 transform([s,t,e], "som") :- !.
+transform([n,o,t,a,s|X], [n,o,t,a,s|X]) :-!.
 transform(X, Y) :-
     conjugation(X, sg2, now, Z),
     append(Z, [m],Y),!.
@@ -85,6 +86,11 @@ conditional_lemm([m,e,n,o,m], [m,e,n,o]) :- !.
 conditional_lemm([m,e,n,a,c,h], [m,e,n,o]) :-!.
 conditional_lemm([m,e,n,a,m], [m,e,n,o]) :-!.
 conditional_lemm([m,e,n,a,m,i], [m,e,n,o]) :-!.
+conditional_lemm([p,o,c,i,t,a,c|_], [p,o,c,i,t,a,c]) :-!.
+conditional_lemm([p,c|_], [p,o,c,i,t,a,c]) :-!.
+conditional_lemm([n,o,t,e,b,o,o,k|_], [p,o,c,i,t,a,c]) :-!.
+conditional_lemm([l,a,p,t,o,p|_], [p,o,c,i,t,a,c]) :-!.
+conditional_lemm([n,o,t,a,s|_], [p,o,c,i,t,a,c]) :-!.
 conditional_lemm(X,X).
 % is_declination(+X, +Y)
 %   returns true if X is declination of Y
@@ -303,6 +309,7 @@ dream(Atom, Number, Time) :-
     Chars = [s,n,i,v,a|_],
     conjugation(Chars, Number, Time,_).
 
+% --- remember script ---
 remember(Atom, Number, Time) :-
     atom_chars(Atom,Chars),
     Chars = [p,a,m,a,t,a|_],
