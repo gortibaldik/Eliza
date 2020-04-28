@@ -135,9 +135,13 @@ match([Head|Tail], [class(C, Head)|Pattern_tail]) :-
 match([Head|Tail], [class(C, Head, Argument)|Pattern_tail]) :-
     call(C, Head,Argument), match(Tail, Pattern_tail).
 
+match([Head|Tail], [class(C, Head, Argument1, Argument2)|Pattern_tail]) :-
+    call(C, Head,Argument1, Argument2), match(Tail, Pattern_tail).
+
 match([DeclinedHead|Tail], [Head|Pattern_tail]) :-
     Head \= class(_,_),
     Head \= class(_,_,_),
+    Head \= class(_,_,_,_),
     is_declination(DeclinedHead, Head), 
     match(Tail, Pattern_tail).
 
@@ -156,6 +160,9 @@ match_var([Head|Rest], [class(C, Head)|Pattern_tail], [], Rest, Pattern_tail) :-
 match_var([Head|Rest], [class(C, Head, Argument)|Pattern_tail], [], Rest, Pattern_tail) :-
     call(C, Head, Argument), !.
 
+match_var([Head|Rest], [class(C, Head, Argument1, Argument2)|Pattern_tail], [], Rest, Pattern_tail) :-
+    call(C, Head, Argument1, Argument2), !.
+
 % having introduced scripts with keywords from classes 
 % its not safe to call is_declination, because
 % it calls atom_chars which throws exception on variables
@@ -163,6 +170,7 @@ match_var([Head|Rest], [class(C, Head, Argument)|Pattern_tail], [], Rest, Patter
 match_var([DeclinedHead|Rest], [Head|Pattern_rest], [], Rest, Pattern_rest) :-
     Head \= class(_,_),
     Head \= class(_,_,_),
+    Head \= class(_,_,_,_),
     is_declination(DeclinedHead, Head), !.
 
 
@@ -272,23 +280,23 @@ scripts(
         keyword(vas, 3),
         [
             pattern(
-                matched([_, vas, _, class(family_masculine, F, _), X]),
+                matched([_, class(possessive, _, y), _, class(family_masculine, F, _), X]),
                 actions([
                     equivalence(family)
                 ])
             ),
             pattern(
-                matched([_, vas, _, class(family_feminine, F,_), X]),
+                matched([_, class(possessive, _, y), _, class(family_feminine, F,_), X]),
                 actions([
                     equivalence(family)
                 ])
             ),
             pattern(
-                matched([_,vas,X]),
+                matched([_,class(possessive, P, y),X]),
                 actions([
-                    response([vas, X, '?']),
-                    response([preco, hovorite, ze, vas, X, '?']),
-                    response([je, to, pre, vas, dolezite, ',', ze, vas, X, '?'])
+                    response([P, X, '?']),
+                    response([preco, hovorite, ze, P, X, '?']),
+                    response([je, to, pre, vas, dolezite, ',', ze, P, X, '?'])
                 ])
             )
         ]
@@ -328,7 +336,7 @@ scripts(
                 ])
             ),
             pattern(
-                matched([_, o,class(possessive, P), class(family_feminine, F, l), X]),
+                matched([_, o,class(possessive, P, _), class(family_feminine, F, l), X]),
                 actions([
                     response([co, si, myslite, o, P, F, '?']),
                     response([co, pekne, vam, napada, ',', ked, rozpravate, o, P, F, '?']),
@@ -419,16 +427,99 @@ scripts(
     )
 ).
 
-% 'everybody' script
-scripts(Script) :-
-    everybody(Everybody), 
-    Script = script(
-        keyword(Everybody, 2),
+% dream_noun_script
+scripts(
+    script(
+        keyword(sen, 6),
         [
             pattern(
-                matched([_, Everybody, _]),
+                matched([_, class(dream, X, pl), _]),
                 actions([
-                    response([naozaj, Everybody, '?']),
+                    response([preco, hovorite, prave, o, tychto, snoch, ?]),
+                    response([ktore, osoby, sa, objavuju, vo, vasich, snoch, ?]),
+                    response([snivaju, sa, vam, tie, sny, casto, '?']),
+                    equivalence(sen),
+                    response([nemyslite, si, ze, tie, sny, maju, nieco, docinenia, s, vasimi, problemami, '?']),
+                    newkey
+                ])
+            ),
+            pattern(
+                matched([_, class(dream, X, sg), _]),
+                actions([
+                    response([co, vam, napada, pri, pomysleni, na, ten, sen, '?']),
+                    response([casto, snivate, ?]),
+                    response([ktore, osoby, sa, objavuju, vo, vasich, snoch, ?]),
+                    equivalence(sen),
+                    response([nemyslite, si, ze, ten, sen, ma, nieco, docinenia, s, vasimi, problemami, '?']),
+                    newkey
+                ])
+            )
+        ]
+    )
+  ).
+
+% dream_verb_script
+scripts(
+    script(
+        keyword(snivat, 7),
+        [
+            pattern(
+                matched([_, class(dream, _, pl2, now),_,o, X]),
+                actions([
+                    response([casto, snivate, o, X, ?]),
+                    response([snivate, aj, o, inych, veciach, nez, len, o, X, ?]),
+                    response([snivali, ste, o, X, aj, predtym, ?]),
+                    equivalence(snivat),
+                    newkey
+                ])
+            ), 
+            pattern(
+                matched([_, class(dream, _, pl2, now),_,ze, X]),
+                actions([
+                    response([casto, snivate, ze, X, ?]),
+                    response([snivate, aj, o, inych, veciach, nez, len, ze, X, ?]),
+                    response([snivali, ste, ze, X, aj, predtym, ?]),
+                    equivalence(snivat),
+                    newkey
+                ])
+            ), 
+            pattern(
+                matched([_, class(dream, _, sg, past), _, o, X]),
+                actions([
+                    response([napada, vam, dovod, preco, sa, vam, snivalo, o, X, '?']),
+                    response([poznate, este, niekoho, komu, by, sa, tiez, mohlo, snivat, o, X, '?']),
+                    response([o, com, sa, vam, este, snivalo, '?'])
+                ])
+            ),
+            pattern(
+                matched([_, class(dream, _, sg3, now),_,o, X]),
+                actions([
+                    response([poznate, este, niekoho, kto,tiez, sniva, o, X, '?']),
+                    response([napada, vam, dovod, preco, sa, vam, sniva, o, X, '?']),
+                    response([o, com, sa, vam, este, sniva, '?'])
+                ])
+            ),
+            pattern(
+                matched([_, class(dream, _, sg3, now),_,ze, X]),
+                actions([
+                    response([preco, si, myslite, ze, sa, vam, sniva, ze, X, '?']),
+                    response([napada, vam, este, niekto, kto, sniva, ze, X, '?']),
+                    response([o, com, sa, vam, este, sniva, '?'])
+                ])
+            )
+        ]
+    )
+).
+
+% 'everybody' script
+scripts(
+    script(
+        keyword(kazdy, 2),
+        [
+            pattern(
+                matched([_, class(everybody, X), _]),
+                actions([
+                    response([naozaj, X, '?']),
                     response([mozete, mi, to, upresnit, '?']),
                     response([je, to, niekto, specialny, '?']),
                     response([uvedte, priklad, ',', koho, sa, to, tyka,'.']),
@@ -439,7 +530,8 @@ scripts(Script) :-
                 ])
             )
         ]
-    ).
+    )
+).
 
 % 'remember' script
 scripts(
