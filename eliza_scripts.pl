@@ -336,12 +336,12 @@ scripts(
                 ])
             ),
             pattern(
-                matched([_, o,class(possessive, P, _), class(family_feminine, F, l), X]),
+                matched([_, o,class(possessive, P, _), class(family_feminine, F, l), class(atom, A), X]),
                 actions([
                     response([co, si, myslite, o, P, F, '?']),
                     response([co, pekne, vam, napada, ',', ked, rozpravate, o, P, F, '?']),
-                    response([o, P, F, X, '?']), 
-                    response([je, este, niekto, ',', koho, poznate, o, kom, X, '?'])
+                    response([o, P, F,A, X, '?']), 
+                    response([je, este, niekto, ',', koho, poznate, o, kom,A, X, '?'])
                 ])
             ),
             pattern(
@@ -354,14 +354,14 @@ scripts(
                 ])
             ),
             pattern(
-                matched([_, class(family_feminine, F, d), X]),
+                matched([_, class(family_feminine, F, d), _]),
                 actions([
                     response([F,'?']),
                     response([preco, rozmyslate, o, F, '?'])
                 ])
             ),
             pattern(
-                matched([_, class(family_feminine, F, i), X]),
+                matched([_, class(family_feminine, F, i), _]),
                 actions([
                     response([rozpravate, sa, casto, s, F, '?']),
                     response([nikdy, som, nemohla, byt, s, F, som, totiz, program, a, teda, ju, nemam])
@@ -399,7 +399,7 @@ scripts(
                 ])
             ),
             pattern(
-                matched([_, class(family_masculine, F, dl), X]),
+                matched([_, class(family_masculine, F, dl), _]),
                 actions([
                     response([preco, rozmyslate, o, F, '?']),
                     response([co, si, myslite, o, vasom, F, '?']),
@@ -407,10 +407,20 @@ scripts(
                 ])
             ),
             pattern(
-                matched([_, class(family_masculine, F, i), X]),
+                matched([_, class(family_masculine, F, i), _]),
                 actions([
                     response([rozpravate, sa, casto, s, F, '?']),
                     response([nikdy, som, nemohla, byt, s, F, som, totiz, program, a, teda, ho, nemam])
+                ])
+            ),
+            pattern(
+                matched([_, class(family_masculine, F, n),class(atom, A), X]),
+                actions([
+                    response([vas, F,'?']),
+                    response([povedzte, mi, viac, o, vasej, rodine, '!']),
+                    response([je, este, niekto, vo, vasej, rodine, kto, A, X, '?']),
+                    response([myslite, vazne, ',', ked, hovorite, ',', ze, F, A, X, '?']),
+                    response([co, vam, este, prichadza, na, mysel, ',', ked, hovorite, ':', '\"', F,A, X, '\"'])
                 ])
             ),
             pattern(
@@ -418,9 +428,7 @@ scripts(
                 actions([
                     response([vas, F,'?']),
                     response([povedzte, mi, viac, o, vasej, rodine, '!']),
-                    response([je, este, niekto, vo, vasej, rodine, kto, X, '?']),
-                    response([myslite, vazne, ',', ked, hovorite, ',', ze, F, X, '?']),
-                    response([co, vam, este, prichadza, na, mysel, ',', ked, hovorite, ':', '\"', F, X, '\"'])
+                    response([co, vam, este, prichadza, na, mysel, ',', ked, hovorite, ':', '\"', F,X, '\"'])
                 ])
             )
         ]
@@ -796,6 +804,35 @@ scripts(
         ]
     )
 ).
+
+% 'can' script
+scripts(
+    script(
+        keyword(moct, 0),
+        [
+            pattern(
+                matched([_, class(can, _, sg1, _), X]),
+                actions([
+                    response([ak, si, myslis, ze, ja,mozem, X, preco, ty, nie, ?]), 
+                    equivalence(co),
+                    response([to, len, ty, chces, mna, taku, ze, mozem, X]),
+                    response([mozno, by, si, mohol,ty, sam, vyskusat, X])
+                ])
+            ),
+            pattern(
+                matched([_, class(can, _, pl2,_), X]),
+                actions([
+                    response([cokolvek, chces, zalezi, len, na, tebe]), 
+                    response([mozete, X, ale, nemusite]),
+                    response([a, mozno, to, ani, nechcete, urobit]),
+                    equivalence(co)
+                ])
+            )
+        ]
+    )
+).
+
+
 
 halve(L,A,B) :- halve_(L,L,A,B).
 
