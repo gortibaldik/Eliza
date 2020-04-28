@@ -622,6 +622,25 @@ scripts(
     )
 ).
 
+% 'perhaps' script
+scripts(
+    script(
+        keyword(mozno, 0),
+        [
+            pattern(
+                matched([_]),
+                actions([
+                    response([nevyzerate, prave, najistejsi, '.']),
+                    response([preco, ten, neisty, ton, ?]),
+                    response([budte, pozitivnejsi, '!']),
+                    response([vidim, ze, si, nie, ste, isti]),
+                    response([mozno, ?])
+                ])
+            )
+        ]
+    )
+).
+
 
 
 halve(L,A,B) :- halve_(L,L,A,B).
