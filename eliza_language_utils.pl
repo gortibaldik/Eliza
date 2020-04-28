@@ -7,31 +7,36 @@ punctuation('?').
 punctuation(';').
 punctuation(':').
 
-lemm_([s,o,m], "ste") :- !.
-lemm_([s,i], "si") :-!.
-lemm_([s,t,e], "som") :- !.
-lemm_(X, Y) :-
+transform_([s,p,o,m,i,n,a|X], [p,a,m,a,t,a|X]) :-!.
+transform_(X,X).
+
+
+transform([s,o,m], "ste") :- !.
+transform([s,i], "si") :-!.
+transform([s,t,e], "som") :- !.
+transform(X, Y) :-
     conjugation(X, sg2, now, Z),
     append(Z, [m],Y),!.
-lemm_(X,Y) :-
+transform(X,Y) :-
     conjugation(X, pl2, now, Z),
     append(Z, [m],Y),!.
-lemm_(X,Y) :-
+transform(X,Y) :-
     conjugation(X, sg1, now, Z),
     append(Z, [t,e],Y), !.
     
-lemm_([m,o,j|X], [v,a,s|X]) :- !.
-lemm_([n,a,s|X], [v,a,s|X]) :- !.
-lemm_([m,i], "vam") :- !.
-lemm_([t,v,o,j|X], [m,o,j|X]) :-!.
-lemm_([v,a,s|X], [m,o,j|X]) :-!.
-lemm_(X,X).
+transform([m,o,j|X], [v,a,s|X]) :- !.
+transform([n,a,s|X], [v,a,s|X]) :- !.
+transform([m,i], "vam") :- !.
+transform([t,v,o,j|X], [m,o,j|X]) :-!.
+transform([v,a,s|X], [m,o,j|X]) :-!.
+transform(X,X).
 
 
 
 stem_lemm(Atom, Stemmed) :-
     atom_chars(Atom, Chars),
-    lemm_(Chars, Chars_lemm),
+    transform_(Chars, Chars_1),
+    transform(Chars_1, Chars_lemm),
     atom_chars(Stemmed, Chars_lemm).
 
 traverse_input_stem_lemm([Word], []) :-
@@ -235,6 +240,10 @@ possessive_([i,c,h], they).
 possessive(X, Person) :-
     atom_chars(X, Chars), 
     possessive_(Chars, Person).
+
+% --- reflexive matching ---
+reflexive(sa).
+reflexive(si).
 
 
 % --- family_script ---
