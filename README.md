@@ -103,3 +103,11 @@ __Approaches__ :
 - basic transformations
   -  ```sg1``` -> ```pl2``` ( when user speaks about himself, we want to ask him questions (and use polite form (that's why we don't use ```sg2``` instead of ```pl2```)))
   - ```pl2``` -> ```sg1``` | ```sg2``` -> ```pl1``` (same reasons as above)
+
+TODO : How does conjugation work, which predicates does it use
+
+TODO : Example communication with Eliza -> made by sister
+
+TODO : Example communication with Eliza -> from original paper
+
+TODO : How does Eliza matching process works ?
