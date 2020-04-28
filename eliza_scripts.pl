@@ -606,6 +606,22 @@ scripts(
     )
 ).
 
+% 'name' script
+scripts(
+    script(
+        keyword(meno, 15),
+        [
+            pattern(
+                matched([_]),
+                actions([
+                    response([mena, ma, vobec, nezaujimaju,'.', '.', '.']),
+                    response([uz, som, vam, povedal, ze, ma, mena, vobec, nezaujimaju, '!'])
+                ])
+            )
+        ]
+    )
+).
+
 
 
 halve(L,A,B) :- halve_(L,L,A,B).

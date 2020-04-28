@@ -75,6 +75,12 @@ conditional_lemm([s,n,i,v,a|_], [s,n,i,v,a,t]) :-!.
 conditional_lemm([v,s,e,t,c,i], [k,a,z,d,y]) :- !.
 conditional_lemm([n,i,k,t,o], [k,a,z,d,y]) :- !.
 conditional_lemm([p,a,m,a,t,a|_], [p,a,m,a,t,a,t]) :- !.
+conditional_lemm([m,e,n,_], [m,e,n,o]) :- !.
+conditional_lemm([m,i,e,n], [m,e,n,o]) :- !.
+conditional_lemm([m,e,n,o,m], [m,e,n,o]) :- !.
+conditional_lemm([m,e,n,a,c,h], [m,e,n,o]) :-!.
+conditional_lemm([m,e,n,a,m], [m,e,n,o]) :-!.
+conditional_lemm([m,e,n,a,m,i], [m,e,n,o]) :-!.
 conditional_lemm(X,X).
 % is_declination(+X, +Y)
 %   returns true if X is declination of Y
