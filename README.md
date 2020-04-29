@@ -139,7 +139,17 @@ I'll show workflow of predicate ```eliza/0```, which is the main component of th
 
 ### Memory concept
 
-  - 
+  - sometimes Eliza can't find any keyword in the ```user_input```, to be able to simulate real conversation it is good to remember some of the user_phrases 
+  - especially we remember each phrase matched with keyword ```your``` and keyword ```family``` 
+  - how does "remembering" work ?
+      - dynamic predicate ```memory(List_of_matched_responses)``` 
+      - each time ```your``` or ```family``` keyword is encountered we use predicate ```get_random_memory_pattern(-Pattern, +Keyword_encountered)``` which based on ```Keyword_encountered``` (which can be ```your``` or ```family```) returns some memory pattern, and this pattern is then matched with user_input and the response is appended to end of ```List_of_matched_responses``` thanks to predicate ```append_to_memory_list```
+- what happens in ```get_initial_uninformed_memory_comment```  ? 
+  - we access the first element in ```List_of_matched_responses``` and return it with ```keyword``` ```memory``` 
+- what happens if we fail to find keyword ?
+  - we remove response from the head of memory in order to not repeat previous answers with aid of ```remove_head_memory_list``` 
+- ```remove_head_memory_list``` makes use of [```retract```](https://www.swi-prolog.org/pldoc/man?predicate=retract/1)
+- ```append_to_memory_list``` makes use of [```asserta```](https://www.swi-prolog.org/pldoc/man?predicate=asserta/1)
 
 ### Action memory concept
 
