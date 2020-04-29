@@ -30,6 +30,7 @@ transform(X,Y) :-
 transform([m,o,j|X], [v,a,s|X]) :- !.
 transform([n,a,s|X], [v,a,s|X]) :- !.
 transform([m,i], "vam") :- !.
+transform([m,a], "vas") :-!.
 transform([t,i], "mi") :-!.
 transform([t,v,o,j|X], [m,o,j|X]) :-!.
 transform([v,a,s|X], [m,o,j|X]) :-!.
@@ -271,10 +272,10 @@ conjugation(X, sg3, now,Y) :-
 conjugation(X, pl3, now, Y) :-
     append(Y, [u], X), !.
 
-
-conj(X, Y, Z) :-
-    atom_chars(X, CX),
-    conjugation(CX, Y, Z,_).
+% conj(+Verb, -Person, -Time)
+conj(Verb, Person, Time) :-
+    atom_chars(Verb, CX),
+    conjugation(CX, Person, Time,_).
 % ---
 % --- possessive matching ---
 possessive_([m,o,j|_], i).
