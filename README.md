@@ -96,15 +96,33 @@ I'll show workflow of predicate ```eliza/0```, which is the main component of th
     - "Conditional Transformation" : concept of matching when we don't actually change user input, but we look at it as on similar keyword
       - for example when user says ```I'm depressed``` we should look at it as on ```I'm sad``` because the meanings are similar, although we don't transform ```depressed``` -> ```sad``` because the meanings aren't same
   - now there are two possibilites how to continue based on output of ```get_scripts_matching_keywords/2```, they are basically the same, so I'll unify their description even though they are in separate code scopes
-  - ```get_initial_uninformed_memory_comment(-Output, -Keyword, -Pattern_index, -Priority)``` - get last entry in ```memory/1```, fail if there is only empty list in ```memory/1``` ([How does ```memory/1``` work ?](#memory-concept))
+  - ```get_initial_uninformed_memory_comment(-Output, -Keyword, -Pattern_index, -Priority)``` - get last entry in ```memory/1```, fail if there is only empty list in ```memory/1```, thanks to this predicate we can get answer/query to user input even though we failed to find keywords in it ([How does ```memory/1``` work ?](#memory-concept))
+  - if ```get_initial_uninformed_memory_comment/4``` fails we call ```get_initial_uninformed_comment(-Output, -Keyword, -Pattern_index, -Priority)```, which stores last used entry from none script in simple fact ```memory_current_action(-Keyword, -Pattern_index, -Action_index)```, again, thanks to this predicate we can get answer/query to user input even though we failed to find keywords in it ([How does ```memory_current_action/3``` work ?](#action-memory-concept))
+  - with aid of ```find_best_from_scripts/5``` traverses all the scripts and makes use of following predicate
+  - ```get_informed_comment(+User_input, +Script, -Action, -Keyword, -Pattern_index)``` - this predicate uses many hidden matching gems which are described [here](#matching). It tries to match user input to any of the patterns of the ```Script``` and unify the result with the actions of pattern, hence it exploits [script structure](#structure-of-scripts). If it succeeds, it returns ```Action``` [which has to be done](#types-of-actions) in script search, ```Keyword``` of matched script and ```Pattern_index``` of matched pattern.
+  - after having found the answer to user input, Eliza prints it with predicate ```comment``` 
 
 
+
+### Structure of scripts
+
+- 
+
+
+
+### Matching
+
+- 
 
 
 
 ### Memory concept
 
   - 
+
+### Action memory concept
+
+- 
 
 
 
