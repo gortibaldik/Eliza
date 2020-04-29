@@ -1,12 +1,12 @@
 # ELIZA CHATBOT
 
-According to [wikipedia](https://en.wikipedia.org/wiki/ELIZA), Eliza is an early natural language processing computer program simulating a conversation. I attempted to recreate intended behaviors of Eliza so that it'll be able to communicate in Slovak. The implementation is based on [this paper](http://web.stanford.edu/class/cs124/p36-weizenabaum.pdf) and [this tutorial](http://www.like-a-boss.net/2018/08/24/eliza-a-tutorial-reconstruction-in-prolog.html)
+According to [wikipedia](https://en.wikipedia.org/wiki/ELIZA), Eliza is an early natural language processing computer program simulating a conversation. I attempted to recreate the intended behaviors of Eliza so that it'll be able to communicate in Slovak. The implementation is based on [this paper](http://web.stanford.edu/class/cs124/p36-weizenabaum.pdf) and [this tutorial](http://www.like-a-boss.net/2018/08/24/eliza-a-tutorial-reconstruction-in-prolog.html).
 
-## Utilization
+## Usage
 
 Every line of code was developed and tested using ```SWI - Prolog``` version ```8.0.3 64-bit```. All the pieces of code are intended to be used all together and they're in separate files only for better readibility.
 
-- The main part, the _conversation tool_ is in predicate ```eliza/0```.  It holds a conversation with user in Slovak until it spots line with single word : ```keyword``` "dovidenia" or until user hasn't used obscenities more than 3 times. 
+- The main part, the _conversation tool_ is in predicate ```eliza/0```.  It holds a conversation with user in Slovak until it spots line with single word : ```keyword``` "dovidenia" or until user has used obscenities more than 3 times. 
 
 - Other useful tools include: 
   - predicate ```conj(+Verb, -Person, -Time)``` which returns the conjugation of ```Verb```  
@@ -119,9 +119,9 @@ I'll show workflow of predicate ```eliza/0```, which is the main component of th
 - because of the structure of patterns ```matched keyword``` is automatically unified with output in ```actions```
 - matching is done with aid of predicate ```match(+User_input, +To_be_matched)``` 
   - we distinct 3 types of words to be matched :
-    - atom_is_to_be_matched -> we check all the declinations of word from user input and if any of them is equal to atom, we proceed to the rest of User_input and Pattern_input, otherwise we fail
+    - atom_is_to_be_matched -> we check all the declensions of word from user input and if any of them is equal to atom, we proceed to the rest of User_input and Pattern_input, otherwise we fail
     - class_to_be_matched - > we got a list of predicates aiding us to match different kinds of words, which are called with predicate ```call(Predicate, Arg1,Arg2...)``` :
-      - synonyms (for example ```sad```, ```happy```...) which have following structure ```synonym(Word)``` which checks if word from the user input is declination of any of the synonyms and unifies it with Word (that means, that we can mention ```Word``` in actions and it'll be unified with user_input)
+      - synonyms (for example ```sad```, ```happy```...) which have following structure ```synonym(Word)``` which checks if word from the user input is declension of any of the synonyms and unifies it with Word (that means, that we can mention ```Word``` in actions and it'll be unified with user_input)
       - conjugations (for example ```dream```, ```remember```) which have the following structure ```conjugation(+Verb, +Time, +Number, -Base)``` - successes if Verb has defined Time and Number
     - variable_to_be_matched - same concept as the above
 
@@ -182,7 +182,7 @@ During the implementation of Eliza I've chosen 2 basic approaches to detection o
 
   - ##### Problems :
 
-    - Keyword 'sorry' doesn't have high priority. When the user says ```my sister apologized for her actions``` the keyword isn't ```(apologized = sorry)``` but ```my```. Because of lemmatization Eliza would obtain sentence ```my sister sorry for her actions``` which is an obvious nonsense. 
+    - Keyword 'sorry' doesn't have a high priority. When the user says ```my sister apologized for her actions``` the keyword isn't ```(apologized = sorry)``` but ```my```. Because of lemmatization Eliza would obtain sentence ```my sister sorry for her actions``` which is an obvious nonsense. 
 
 - #### Second approach :
 
@@ -192,7 +192,7 @@ During the implementation of Eliza I've chosen 2 basic approaches to detection o
 
   - ##### Problems :
 
-    - Eliza obtains sentence in the original form, so she can infer transformation in answering_phase.  There are many problems in conjugation and declination transformations, but not in the 'sorry' script.
+    - Eliza obtains sentence in the original form, so she can infer transformation in answering_phase.  There are many problems in conjugation and declension transformations, but not in the 'sorry' script.
 
 ### Family script
 
@@ -219,7 +219,7 @@ __Approaches__ :
 
     - While I've resolved the problem with ```your``` in front of ```family member``` another problem emerged : 
       - ```findall``` predicate has to go through many more scripts in ```keyword_detection phase``` 
-    - This doesn't handle any declinations at all.
+    - This doesn't handle any declensions at all.
 
   - ##### Possible solutions :
 
@@ -227,7 +227,7 @@ __Approaches__ :
   
 - #### Third approach :
 
-  - ```family``` keyword and ```family_masculine``` and ```family_feminine``` declination handling - this means that there are 2 possible ```adjective declinations``` . Example of communication :
+  - ```family``` keyword and ```family_masculine``` and ```family_feminine``` declensiond handling - this means that there are 2 possible ```adjective declensions``` . Example of communication :
 
     ​		```> otec nevie programovat``` (my father can't code)
 
@@ -242,7 +242,7 @@ __Approaches__ :
     - recognition of grammatical genders in grammatical cases different from nominative
     
 
-- #### Forth approach :
+- #### Fourth approach :
 
   - introduction of check of grammatical cases in ```eliza_language_utils.pl```, after detection of any ```family member``` we also detect its grammatical case with aid of ```gram_case_masculine_sg``` and ```gram_case_feminine_sg```
 
