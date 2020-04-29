@@ -3,7 +3,7 @@
 :- ensure_loaded(eliza_scripts).
 :- ensure_loaded(eliza_memory_patterns).
 
-main_prompt :-
+eliza :-
     start_script(Sentence),
     comment(Sentence),
     repeat,
@@ -33,7 +33,7 @@ get_comment(User_input, Output) :-
     % if we've encountered "vas" then we keep in
     % head possible questions connected with this keyword
     (
-        Keyword = vas ->
+        (Keyword = vas; Keyword = family) ->
         get_random_memory_pattern(Pattern), 
         Pattern = memory_pattern(matched(Matched), Response),
         match(Stemmed_lemmed, Matched),
