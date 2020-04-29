@@ -972,6 +972,53 @@ scripts(
     )
 ).
 
+% 'school_subject' script
+scripts(
+    script(
+        keyword(predmet, 10),
+        [
+            pattern(
+                matched([_, class(school_grade, Grade,b), _, class(from, From),_, class(school_subject, Subject, g), _]),
+                actions([
+                    response([preco, si, myslite,',', ze, to, bola, From, Subject, prave, Grade, ?]),
+                    response([koho, chyba, si, myslite,',', ze, to, bola, ?]),
+                    response([ste, z, toho, nestastny, ?]),
+                    response([tak, vam, treba,',', ked, sa, neucite, ?]),
+                    response([nechcete, sa, zacat, ucit, ?])
+                ])
+            ),
+            pattern(
+                matched([_, class(school_grade, Grade,g), _, class(from, From),_, class(school_subject, Subject, g), _]),
+                actions([
+                    response([blahozelam]),
+                    response([pochvalili, vas, rodicia, za, to, ?]),
+                    response([neviem, ci, by, som, sa, tym, chvalila]),
+                    response([zasluzene, ?]),
+                    response([ja, v, tvojom, veku, som, mala, len, jednotky]),
+                    response([uzivate, si, to,',', citite, sa, dobre, ?])
+                ])
+            ),
+                pattern(
+                    matched([_,  class(school_grade, Grade,n), _, class(from, From),_, class(school_subject, Subject, g), _]),
+                    actions([
+                        response([aky, z, toho, mate, pocit, ?]),
+                        response([rozmyslate, o, moznom, doucovani, ?]),
+                        response([aku, znamku, dostal, vas, kamarat, ?]),
+                        response([mate, v, plane, sa, zlepsit, alebo, vam, to, takto, vyhovuje, ?])
+                    ])
+                ),
+                pattern(
+                    matched([_, class(school_subject, Subject, _)]),
+                    actions([
+                        response([uvedomujete, si, co, mi, tu, hovorite, ?]),
+                        response([nezdielam, s, vami, rovnaky, nazor])
+                    ])
+                )
+                    
+        ]
+    )
+).
+
 stop_eliza([chod, do, prdele, ty, drbo, '!']).
 
 halve(L,A,B) :- halve_(L,L,A,B).

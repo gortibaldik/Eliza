@@ -145,6 +145,22 @@ conditional_lemm([j,e,b|_], [n,a,d,a,v,k,a]) :-!.
 conditional_lemm([s,v,i,n|_], [n,a,d,a,v,k,a]) :-!.
 conditional_lemm([p,i,c,_], [n,a,d,a,v,k,a]) :-!.
 conditional_lemm([z,o,p,a], [n,a,d,a,v,k,a]) :-!.
+
+conditional_lemm([m,a,t,e,m,a,t,i,k|_], [p,r,e,d,m,e,t]) :-!.
+conditional_lemm([m,a,t,i,k|_], [p,r,e,d,m,e,t]) :-!.
+conditional_lemm([f,r,a,n,c,u,z,s,t,i,n|_], [p,r,e,d,m,e,t]) :-!.
+conditional_lemm([f,r,a,n,i,n|_], [p,r,e,d,m,e,t]) :-!.
+conditional_lemm([s,l,o,v,e,n,c,i,n|_], [p,r,e,d,m,e,t]) :-!.
+conditional_lemm([s,l,o,v,i,n|_], [p,r,e,d,m,e,t]) :-!. 
+conditional_lemm([a,n,g,l,i,n|_], [p,r,e,d,m,e,t]) :-!.
+conditional_lemm([i,n,f,o,r,m,a,t,i,k|_], [p,r,e,d,m,e,t]) :-!.
+conditional_lemm([t,e,l,e,s,n|_], [p,r,e,d,m,e,t]):-!.
+conditional_lemm([c,h,e,m,i|_], [p,r,e,d,m,e,t]) :-!.
+conditional_lemm([b,i,o,l,o,g,i|_], [p,r,e,d,m,e,t]) :-!. 
+conditional_lemm([f,y,z,i,k|_], [p,r,e,d,m,e,t]) :-!.
+
+
+
 conditional_lemm(X,X).
 
 % is_declination(+X, +Y)
@@ -196,6 +212,7 @@ gram_case_feminine_sg(X,g) :-
     (
         hard(Conson) -> Y = y;
         soft(Conson) -> Y = e;
+        Conson = i -> Y = e;
         fail
     ), !.
 
@@ -206,6 +223,8 @@ gram_case_feminine_sg(X,d) :-
         soft(Conson) -> Y = i;
         fail
     ).
+gram_case_feminine_sg(X,i) :-
+    append(_, [o,u], X), !.
 
 gram_case_feminine_sg(X,a) :-
     append(_, [u], X), !.
@@ -218,8 +237,6 @@ gram_case_feminine_sg(X,l) :-
         fail
     ), !.
 
-gram_case_feminine_sg(X,i) :-
-    append(_, [o,u], X), !.
 
 
 gram_case_masculine_sg(X, ga) :-
@@ -410,3 +427,18 @@ feel(Atom, Number, Time) :-
     atom_chars(Atom, Chars), 
     Chars = [c,i,t,i|_],
     conjugation(Chars, Number, Time,_).
+
+% --- school_subject script ---
+school_subject(Subject, Gram_case) :-
+    atom_chars(Subject, Chars),
+    conditional_lemm(Chars, [p,r,e,d,m,e,t]),
+    gram_case_feminine_sg(Chars, Gram_case).
+
+school_grade('1',g).
+school_grade('2',g).
+school_grade('3',n).
+school_grade('4',b).
+school_grade('5',b).
+
+from(z).
+from(zo).
