@@ -102,7 +102,7 @@ I'll show workflow of predicate ```eliza/0```, which is the main component of th
 
 
 
-- ### Memory concept :
+### Memory concept :
 
   - 
 
