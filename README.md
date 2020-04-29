@@ -153,12 +153,14 @@ I'll show workflow of predicate ```eliza/0```, which is the main component of th
 
 ### Action memory concept
 
-- 
+- in order not to repeat answers we have dynamic predicate ```memory_current_action(?Keyword, ?Pattern_index, ?Action_index)```  
+- each time some action is selected as the answer for ```user_input``` we use predicate ```assert_next_action``` which increments ```Action_index``` modulo ```number_of_actions``` 
+- again we make use of  [```retract```](https://www.swi-prolog.org/pldoc/man?predicate=retract/1) and [```asserta```](https://www.swi-prolog.org/pldoc/man?predicate=asserta/1)
 
 
 
 
-# Lemmatization and stemming
+### Lemmatization and stemming
 
 - its considerably harder to detect keywords in Slovak than in English mainly because of declension of nouns and conjugation of verbs
 
@@ -263,7 +265,3 @@ __Approaches__ :
 - basic transformations
   -  ```sg1``` -> ```pl2``` ( when user speaks about himself, we want to ask him questions (and use polite form (that's why we don't use ```sg2``` instead of ```pl2```)))
   - ```pl2``` -> ```sg1``` | ```sg2``` -> ```pl1``` (same reasons as above)
-
-TODO : How does conjugation work, which predicates does it use
-
-TODO : How does Eliza matching process works ?
