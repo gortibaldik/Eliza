@@ -16,6 +16,8 @@ transform([j,a], [v,y]) :-!.
 transform([s,o,m], "ste") :- !.
 transform([s,i], "si") :-!.
 transform([s,t,e], "som") :- !.
+transform([s,e,m], "sem") :-!.
+transform([i,s,t,e], "iste") :-!.
 transform([n,o,t,a,s|X], [n,o,t,a,s|X]) :-!.
 transform(X, Y) :-
     conjugation(X, sg2, now, Z),
@@ -31,6 +33,8 @@ transform([m,o,j|X], [v,a,s|X]) :- !.
 transform([n,a,s|X], [v,a,s|X]) :- !.
 transform([m,i], "vam") :- !.
 transform([m,a], "vas") :-!.
+transform([m,n,a], "vas") :-!.
+transform([m,n,e], "vam") :-!.
 transform([t,i], "mi") :-!.
 transform([t,v,o,j|X], [m,o,j|X]) :-!.
 transform([v,a,s|X], [m,o,j|X]) :-!.
@@ -61,9 +65,11 @@ traverse_input_stem_lemm([],[]).
 % used only in keyword matching phase
 no_declination(ak).
 no_declination(nie).
+no_declination(sem).
 
 conditional_lemm([p,r,e,p,a,c|_], [p,r,e,p,a,c]) :- !.
 conditional_lemm([o,s,p,r,a,v,e|_], [p,r,e,p,a,c]) :- !.
+
 conditional_lemm([b,r,a,t|_], [f,a,m,i,l,y]) :- !.
 conditional_lemm([s,e,s,t,r|_], [f,a,m,i,l,y]) :- !.
 conditional_lemm([o,t,e,c|_], [f,a,m,i,l,y]) :- !.
@@ -76,39 +82,54 @@ conditional_lemm([t,e,t|_], [f,a,m,i,l,y]) :- !.
 conditional_lemm([d,e,d|_], [f,a,m,i,l,y]) :-!.
 conditional_lemm([t,a,t,k|_], [f,a,m,i,l,y]) :-!.
 conditional_lemm([b,a,b,k|_], [f,a,m,i,l,y]) :- !.
+
 conditional_lemm([s,n,_], [s,e,n]) :-!.
 conditional_lemm([s,n,o,m], [s,e,n]) :-!.
 conditional_lemm([s,n,o|[_|_]], [s,e,n]) :- !.
 conditional_lemm([s,n,a,m,i], [s,e,n]) :-!.
 conditional_lemm([s,n,i,v,a|_], [s,n,i,v,a,t]) :-!.
+
 conditional_lemm([v,s,e,t,c,i], [k,a,z,d,y]) :- !.
 conditional_lemm([n,i,k,t,o], [k,a,z,d,y]) :- !.
+
+conditional_lemm([s,t,a,l,e], [v,z,d,y]) :-!.
+
 conditional_lemm([p,a,m,a,t,a|_], [p,a,m,a,t,a,t]) :- !.
+
 conditional_lemm([m,e,n,_], [m,e,n,o]) :- !.
 conditional_lemm([m,i,e,n], [m,e,n,o]) :- !.
 conditional_lemm([m,e,n,o,m], [m,e,n,o]) :- !.
 conditional_lemm([m,e,n,a,c,h], [m,e,n,o]) :-!.
 conditional_lemm([m,e,n,a,m], [m,e,n,o]) :-!.
 conditional_lemm([m,e,n,a,m,i], [m,e,n,o]) :-!.
+
 conditional_lemm([p,o,c,i,t,a,c|_], [p,o,c,i,t,a,c]) :-!.
 conditional_lemm([p,c|_], [p,o,c,i,t,a,c]) :-!.
 conditional_lemm([n,o,t,e,b,o,o,k|_], [p,o,c,i,t,a,c]) :-!.
 conditional_lemm([l,a,p,t,o,p|_], [p,o,c,i,t,a,c]) :-!.
 conditional_lemm([n,o,t,a,s|_], [p,o,c,i,t,a,c]) :-!.
+
 conditional_lemm([h,e,j], [a,n,o]) :-!.
 conditional_lemm([n,e], [n,i,e]) :-!.
+
 conditional_lemm([k,e,d,z,e], [p,r,e,t,o,z,e]) :- !.
 conditional_lemm([l,e,b,o], [p,r,e,t,o,z,e]) :-!.
 conditional_lemm([p,r,e,t,o], [p,r,e,t,o,z,e]) :-!.
+
 conditional_lemm([p,o,d,o,b|_], [p,o,d,o,b,n,y]) :- !.
 conditional_lemm([o,b,d,o,b|_], [p,o,d,o,b,n,y]) :-!.
 conditional_lemm([r,o,v,n,a,k|_], [p,o,d,o,b,n,y]) :-!.
 conditional_lemm([p,r,i,p,o,m,i,n|_], [p,o,d,o,b,n,y]) :-!.
+
 conditional_lemm([m,o,z,_,_], [m,o,c,t]) :-!.
 conditional_lemm([m,o,z,_], [m,o,c,t]) :-!.
 conditional_lemm([m,o,z,e,_,e], [m,o,c,t]) :-!.
 conditional_lemm([m,i], [j,a]) :- !.
+
 conditional_lemm([c,h,c|_], [c,h,c,i,e,t]) :-!.
+conditional_lemm([p,o,t,r,e,b,u,j|_], [c,h,c,i,e,t]) :-!.
+
+conditional_lemm([d,e,p,r,e,s,i,v,n,_], [s,m,u,t,n,y]) :-!.
 conditional_lemm([s,m,u,t,n,_], [s,m,u,t,n,y]) :-!.
 conditional_lemm([z,a,r,m,u,t,e,n,_], [s,m,u,t,n,y]) :-!.
 conditional_lemm([n,e,s,t,a,s,t,n,_], [s,m,u,t,n,y]) :-!.
@@ -116,6 +137,7 @@ conditional_lemm([z,u,f,a,l,_], [s,m,u,t,n,y]) :-!.
 conditional_lemm([v,e,s,e,l,_], [s,t,a,s,t,n,y]) :-!.
 conditional_lemm([n,a,d,s,e,n,_], [s,t,a,s,t,n,y]) :-!.
 conditional_lemm([n,a,t,e,s,e,n,_], [s,t,a,s,t,n,y]) :-!.
+
 conditional_lemm([k,o,k,o,t|_], [n,a,d,a,v,k,a]) :-!.
 conditional_lemm([k,u,r,v,a], [n,a,d,a,v,k,a]) :-!.
 conditional_lemm([d,e,b,i,l|_], [n,a,d,a,v,k,a]) :-!.
@@ -124,6 +146,7 @@ conditional_lemm([s,v,i,n|_], [n,a,d,a,v,k,a]) :-!.
 conditional_lemm([p,i,c,_], [n,a,d,a,v,k,a]) :-!.
 conditional_lemm([z,o,p,a], [n,a,d,a,v,k,a]) :-!.
 conditional_lemm(X,X).
+
 % is_declination(+X, +Y)
 %   returns true if X is declination of Y
 %   we need not decline words like "ak" -> "ako"
@@ -369,7 +392,7 @@ can(Atom, Number, Time) :-
 % --- want script ---
 want(Atom, Number, Time) :-
     atom_chars(Atom, Chars),
-    Chars = [c,h,c|_],
+    conditional_lemm(Chars,[c,h,c,i,e,t]),
     conjugation(Chars, Number, Time, _).
 
 % --- sad script ---

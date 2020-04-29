@@ -328,10 +328,10 @@ scripts(
             pattern(
                 matched([_, class(family_feminine, F, n), X]),
                 actions([
+                    response([je, este, niekto, vo, vasej, rodine, kto, X, '?']),
                     response([povedzte, mi, viac, o, vasej, rodine, '!']),
                     response([ked, hovorite, ',', ze, vasa, F, X, ',', co, tym, myslite, '?']),
                     response([vasa, F,'?']),
-                    response([je, este, niekto, vo, vasej, rodine, kto, X, '?']),
                     response([myslite, vazne, ',', ked, hovorite, ',', ze, F, X, '?'])
                 ])
             ),
@@ -862,7 +862,7 @@ scripts(
         keyword(chciet, 1),
         [
             pattern(
-                matched([_, class(want, _, pl2, _), class(conj, A,neuter,neuter),X]),
+                matched([_, class(want, _, pl2, _), class(conj, A,neuter,neuter),X, ',',_]),
                 actions([
                     response([co, by, to, znamenalo, ak, by, ste, mohli, A,X, ?]),
                     response([predpokladate, ',', ze, sa, vam, podari, A, X, '?']),
@@ -871,7 +871,7 @@ scripts(
                 ])
             ),
             pattern(
-                matched([_, class(want, _, pl2, _), class(atom, A),X]),
+                matched([_, class(want, _, pl2, _), class(atom, A),X, ',', _]),
                 actions([
                     response([preco, chcete, A, X, '?']),
                     response([predpokladate, ',', ze, sa, vam, podari,dosiahnut, A, X, '?']),
