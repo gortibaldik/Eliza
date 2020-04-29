@@ -1,6 +1,6 @@
 # ELIZA CHATBOT
 
-According to [wikipedia](https://en.wikipedia.org/wiki/ELIZA), Eliza is an early natural language processing computer program simulating a conversation. I attempted to recreate intended behaviors of Eliza so that it'll be able to communicate in Slovak.
+According to [wikipedia](https://en.wikipedia.org/wiki/ELIZA), Eliza is an early natural language processing computer program simulating a conversation. I attempted to recreate intended behaviors of Eliza so that it'll be able to communicate in Slovak. The implementation is based on [this paper](http://web.stanford.edu/class/cs124/p36-weizenabaum.pdf) and [this tutorial](http://www.like-a-boss.net/2018/08/24/eliza-a-tutorial-reconstruction-in-prolog.html)
 
 ## Utilization
 
