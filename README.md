@@ -1,3 +1,80 @@
+# ELIZA CHATBOT
+
+According to [wikipedia](https://en.wikipedia.org/wiki/ELIZA), Eliza is an early natural language processing computer program simulating a conversation. I attempted to recreate intended behaviors of Eliza so that it'll be able to communicate in Slovak.
+
+## Utilization
+
+Every line of code was developed and tested using ```SWI - Prolog``` version ```8.0.3 64-bit```. All the pieces of code are intended to be used all together and they're in separate files only for better readibility.
+
+- The main part, the _conversation tool_ is in predicate ```eliza/0```.  It holds a conversation with user in Slovak until it spots line with single word : ```keyword``` "dovidenia" or until user hasn't used obscenities more than 3 times. 
+
+- Other useful tools include: 
+  - predicate ```conj(+Verb, -Person, -Time)``` which returns the conjugation of ```Verb```  
+    - (```Time``` = ```now``` , ```Person``` in {```sg1```, ```sg2```, ```sg3```, ```pl1```, ```pl2```, ```pl3```})
+    - (```Time``` = ```past```, ```Person``` in {```sg```, ```pl```})
+    - (```Time``` = ```neuter```, ```Person``` = ```neuter```)
+  - predicate ```read_atomics/1``` which reads the standard input, divides it by whitespaces, lowercases it and returns as a ```list``` of ```atoms```.
+  - predicate ```comment/1``` which writes its argument, which has to be ```list``` of ```atoms``` to standard output
+
+## Example runs of ```eliza/0``` 
+
+### Example run from [paper](http://web.stanford.edu/class/cs124/p36-weizenabaum.pdf)
+
+> __Dobry den porozpravajte mi o vasom probleme!__
+> \> vsetci muzi su rovnaki
+> __Akym sposobom?__
+> \> stale nas s niecim otravuju
+> __Viete vymysliet nejaky konkretny priklad?__
+> \> napriklad, moj priatel ma prinutil prist sem
+> __Vas priatel vas prinutil prist sem?__
+> \> hovori, ze som stale depresivna
+> __Je mi luto, ked pocujem, ze ste depresivna__
+> \> je to pravda, som nestastna
+> __Myslite si, ze ked ste nestastna tak vam pomoze rozpravat sa so mnou?__
+> \> potrebujem nejaku pomoc, to je iste
+> __Preco chcete nejaku pomoc?__
+> \> pretoze sa chcem pohodnut s mojou mamou
+> __Rozpravate sa casto s mamou?__
+> \> ano, moja mama sa o mna stara
+> __Je este niekto vo vasej rodine kto sa o vas stara?__
+> \> moj otec
+> __Vas otec?__
+> \> obcas sa podobas na mojho otca, Eliza
+> __Vidite nejake spolocne vlastnosti?__
+> \> nie si velmi agresivna ale myslim, ze len nechces, aby som si to vsimla
+> __Hovorite nie len preto aby ste zneli nastvane?__
+> \> dovidenia
+> __Dakujem za podnetny rozhovor. Dufam, ze sa este niekedy stretneme.__
+
+
+
+### Example run showing handling of declensions and conjugations in feel script
+
+> __Dobry den porozpravajte mi o vasom probleme!__
+> \> citim sa uplne strasne
+> __Povedzte mi viac o tychto pocitoch__
+> \> citim sa ako na horskej drahe
+> __Ako casto sa citite ako na horskej drahe?__
+> \> citim si nohy
+> __Uzivate si ked si citite nohy?__
+> \> citim sa ako v deliriu
+> __Aky pocit vam to pripomina?__
+> \> dovidenia
+> __Dakujem za podnetny rozhovor. Dufam, ze sa este niekedy stretneme.__
+
+### Example run showing handling of obscenities
+
+> __Dobry den porozpravajte mi o vasom probleme!__
+> \> jebat tento svet
+> __Poprosim vas nenadavajte v tejto konverzacii__
+> \> ale chod do pice
+> __Mozno vam to je prirodzene, ale upozornujem vas nenadavajte mi tu__
+> \> vies co si ? obycajna svina !
+> __Posledny krat vas ziadam nenadavajte mi tu!__
+> \> ty kurva, co ma upozornujes ?
+> __Chod do prdele ty drbo!__
+
+
 # Lemmatization and stemming
 
 - its considerably harder to detect keywords in Slovak than in English mainly because of declension of nouns and conjugation of verbs
@@ -107,7 +184,5 @@ __Approaches__ :
 TODO : How does conjugation work, which predicates does it use
 
 TODO : Example communication with Eliza -> made by sister
-
-TODO : Example communication with Eliza -> from original paper
 
 TODO : How does Eliza matching process works ?
