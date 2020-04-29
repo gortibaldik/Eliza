@@ -44,7 +44,7 @@ Every line of code was developed and tested using ```SWI - Prolog``` version ```
 > \> nie si velmi agresivna ale myslim, ze len nechces, aby som si to vsimla\
 > __Hovorite nie len preto aby ste zneli nastvane?__\
 > \> dovidenia\
-> __Dakujem za podnetny rozhovor. Dufam, ze sa este niekedy stretneme.__\
+> __Dakujem za podnetny rozhovor. Dufam, ze sa este niekedy stretneme.__
 
 
 
@@ -60,7 +60,7 @@ Every line of code was developed and tested using ```SWI - Prolog``` version ```
 > \> citim sa ako v deliriu\
 > __Aky pocit vam to pripomina?__\
 > \> dovidenia\
-> __Dakujem za podnetny rozhovor. Dufam, ze sa este niekedy stretneme.__\
+> __Dakujem za podnetny rozhovor. Dufam, ze sa este niekedy stretneme.__
 
 ### Example run showing handling of obscenities
 
@@ -72,7 +72,35 @@ Every line of code was developed and tested using ```SWI - Prolog``` version ```
 > \> vies co si ? obycajna svina !\
 > __Posledny krat vas ziadam nenadavajte mi tu!__\
 > \> ty kurva, co ma upozornujes ?\
-> __Chod do prdele ty drbo!__\
+> __Chod do prdele ty drbo!__
+
+
+
+## How does it work ?
+
+I'll show workflow of predicate ```eliza/0```, which is the main component of this semestral project.
+
+- At the start of the predicates workflow Eliza prompts user to start conversation with script from ```start_script/1```, and prints it to standard output with ```comment/1``` (```start_script``` is simple fact containing beginning message of conversation, ```comment``` prints ```list``` of atoms gotten from ```start_script``` to standard output)
+
+- ```read_atomics/1``` reads the standard input and breaks it into ```list``` of ```atoms``` which is processed by ```get_comment``` 
+
+- ### Workflow of get_comment :
+
+  - ```traverse_input_stem_lemm(+User_input, -Stemmed_lemmed)```  : 
+    - Since in Slovak there are many different synonyms, conjugations and declensions at first we need to :
+      - unify some kind of words (```stale``` -> ```vzdy``` {```every_time``` ->```always```})
+      - transform possessives (```moj``` -> ```tvoj``` {```my``` -> ```your```}) so that we won't have to worry about these later in processing of input (because when user talks about something belonging to him, we want to query it, so we need these transformations)
+      - transform conjugations (```robim``` -> ```robite``` {```I do``` -> ```you do``` })  for the same reasons as above
+  - ```get_scripts_matching_keywords(+Stemmed_input, -Scripts)``` 
+    - In this phase we traverse input for the second time and use all the conditional transformations to find the keywords
+    - "Conditional Transformation" : concept of matching when we don't actually change user input, but we look at it as on similar keyword
+      - for example when user says ```I'm depressed``` we should look at it as on ```I'm sad``` because the meanings are similar, although we don't transform ```depressed``` -> ```sad``` because the meanings aren't same
+  - now there are two possible options how to continue based on output of ```get_scripts_matching_keywords/2```, they are basically the same, so I'll unify their description even though they are in separate code scopes
+  - ```get_initial_uninformed_memory_comment()
+
+
+
+
 
 
 # Lemmatization and stemming
@@ -182,7 +210,5 @@ __Approaches__ :
   - ```pl2``` -> ```sg1``` | ```sg2``` -> ```pl1``` (same reasons as above)
 
 TODO : How does conjugation work, which predicates does it use
-
-TODO : Example communication with Eliza -> made by sister
 
 TODO : How does Eliza matching process works ?
