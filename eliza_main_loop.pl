@@ -34,7 +34,7 @@ get_comment(User_input, Output) :-
     % head possible questions connected with this keyword
     (
         (Keyword = vas; Keyword = family) ->
-        get_random_memory_pattern(Pattern), 
+        get_random_memory_pattern(Pattern, Keyword), 
         Pattern = memory_pattern(matched(Matched), Response),
         match(Stemmed_lemmed, Matched),
         append_to_memory_list(Response)

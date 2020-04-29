@@ -26,16 +26,27 @@ remove_head_memory_list :-
     retract(memory([X|New])),
     asserta(memory(New)).
 
-get_random_memory_pattern(Pattern) :- 
-    memory_patterns(Patterns), 
+get_random_memory_pattern(Pattern, vas) :- 
+    memory_patterns_your(Patterns), 
     length(Patterns, Length),
     Upper is Length - 1,
     random_between(0, Upper, I),
     nth0(I, Patterns, Pattern).
 
-memory_patterns([
+get_random_memory_pattern(Pattern, family) :-
+    memory_patterns_family(Patterns),
+    length(Patterns, Length),
+    Upper is Length -1,
+    random_between(0, Upper, I),
+    nth0(I, Patterns, Pattern).
+
+memory_patterns_your([
     memory_pattern(matched([_,class(possessive, P, y), X]), response([podme, sa, dalej, porozpravat, ',', preco, P, X, '!'])),
     memory_pattern(matched([_,class(possessive, P, y), X]), response([skor, ste, povedali, ',', ze,P, X])),
     memory_pattern(matched([_,class(possessive, P, y), X]), response([preco, hovorite, ',', ze, P, X, '?'])),
     memory_pattern(matched([_,class(possessive, P, y), X]), response([ma, to, nieco, docinenia, s, tym, ',', ze, P, X, '?']))
+]).
+
+memory_patterns_family([
+    memory_pattern(matched([X]), response([skor, ste, povedali, '\"', X,'\"', ',', preco, ?]))
 ]).
