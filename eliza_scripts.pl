@@ -254,7 +254,7 @@ scripts(
         keyword(ak, 4),
         [
             pattern(
-                matched([_, ak, by,si, Y, ',', _]),
+                matched([_, ak, by, si, Y,',', _]),
                 actions([
                     response([myslite, ',', ze, je, pravdepodobne,',', ze, by, som, Y, '?']),
                     response([co, by, sa, stalo, ak, by, som, Y, '?']),
@@ -263,7 +263,24 @@ scripts(
                 ])
             ),
             pattern(
-                matched([_, ak, by, ste, Y, ',', _]),
+                matched([_, ak, by,si, Y]),
+                actions([
+                    response([myslite, ',', ze, je, pravdepodobne,',', ze, by, som, Y, '?']),
+                    response([co, by, sa, stalo, ak, by, som, Y, '?']),
+                    response([dufas, ze, by, som, Y, '?']),
+                    response([naozaj, si, myslis, ',', ze, by, som, Y, '?'])
+                ])
+            ),
+            pattern(
+                matched([_, ak, by, ste, Y,',', _]),
+                actions([
+                    response([co, by, sa, stalo, ak, by, ste, Y, '?']),
+                    response([dufate, ',', ze, by, ste, Y, '?']),
+                    response([preco, rozmyslate, ',', ze, by, ste, Y, '?'])
+                ])
+            ),
+            pattern(
+                matched([_, ak, by, ste, Y]),
                 actions([
                     response([co, by, sa, stalo, ak, by, ste, Y, '?']),
                     response([dufate, ',', ze, by, ste, Y, '?']),
@@ -311,9 +328,9 @@ scripts(
             pattern(
                 matched([_, class(family_feminine, F, n), X]),
                 actions([
-                    response([vasa, F,'?']),
                     response([povedzte, mi, viac, o, vasej, rodine, '!']),
                     response([ked, hovorite, ',', ze, vasa, F, X, ',', co, tym, myslite, '?']),
+                    response([vasa, F,'?']),
                     response([je, este, niekto, vo, vasej, rodine, kto, X, '?']),
                     response([myslite, vazne, ',', ked, hovorite, ',', ze, F, X, '?'])
                 ])
@@ -747,7 +764,7 @@ scripts(
         keyword(preco, 0),
         [
             pattern(
-                matched([_, preco, class(why_not, Verb, sg1, NonNegated), X]),
+                matched([_, preco, _,class(why_not, Verb, sg1, NonNegated), X]),
                 actions([
                     response([myslite, si, ze, Verb, X, ?]), 
                     response([NonNegated,len, o, tom, neviete]),
@@ -762,6 +779,13 @@ scripts(
                     response([predstavte, si, ze, NonNegated,X,'.', co, sa, stane, '?']),
                     response([pytate, sa, preco,'.', ja, vam, hovorim, ',', ze, vy, NonNegated, X,'!']),
                     equivalence(co)
+                ])
+            ), 
+            pattern(
+                matched([_, preco, X]),
+                actions([
+                    response([vela, ludi, sa, pyta, preco, X,' ', '.','.','.', netrapte, sa, nad, tym]),
+                    response([mozno, nema, zmysel, riesit, preco, X])
                 ])
             )
         ]
@@ -924,6 +948,24 @@ scripts(
                     response([mozno, vam, to, je, prirodzene, ',', ale, upozornujem, vas, nenadavajte, mi, tu]),
                     response([posledny, krat, vas, ziadam, nenadavajte, mi, tu, '!']),
                     response([chod, do, prdele, ty, drbo, '!'])
+                ])
+            )
+        ]
+    )
+).
+
+% 'my' script
+scripts(
+    script(
+        keyword(moj, 0),
+        [
+            pattern(
+                matched([_, class(possessive, P, i), X]),
+                actions([
+                    response([preco, vas, zaujima, P, X, '?']),
+                    response([mate, aj, vy, X, '?']),
+                    response([zaujimate, sa, aj, o, niekoho, ineho, X, '?']),
+                    response([naozaj, P, X, '?'])
                 ])
             )
         ]
