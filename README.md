@@ -96,7 +96,7 @@ I'll show workflow of predicate ```eliza/0```, which is the main component of th
     - "Conditional Transformation" : concept of matching when we don't actually change user input, but we look at it as on similar keyword
       - for example when user says ```I'm depressed``` we should look at it as on ```I'm sad``` because the meanings are similar, although we don't transform ```depressed``` -> ```sad``` because the meanings aren't same
   - now there are two possibilites how to continue based on output of ```get_scripts_matching_keywords/2```, they are basically the same, so I'll unify their description even though they are in separate code scopes
-  - ```get_initial_uninformed_memory_comment(-Output, -Keyword, -Pattern_index, -Priority)``` - get last entry in ```memory/1```, fail if there is only empty list in ```memory/1``` ([How does ```memory/1``` work ?](###memory-concept))
+  - ```get_initial_uninformed_memory_comment(-Output, -Keyword, -Pattern_index, -Priority)``` - get last entry in ```memory/1```, fail if there is only empty list in ```memory/1``` ([How does ```memory/1``` work ?](#memory-concept))
 
 
 
