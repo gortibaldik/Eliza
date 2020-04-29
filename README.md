@@ -100,19 +100,40 @@ I'll show workflow of predicate ```eliza/0```, which is the main component of th
   - if ```get_initial_uninformed_memory_comment/4``` fails we call ```get_initial_uninformed_comment(-Output, -Keyword, -Pattern_index, -Priority)```, which stores last used entry from none script in simple fact ```memory_current_action(-Keyword, -Pattern_index, -Action_index)```, again, thanks to this predicate we can get answer/query to user input even though we failed to find keywords in it ([How does ```memory_current_action/3``` work ?](#action-memory-concept))
   - with aid of ```find_best_from_scripts/5``` traverses all the scripts and makes use of following predicate
   - ```get_informed_comment(+User_input, +Script, -Action, -Keyword, -Pattern_index)``` - this predicate uses many hidden matching gems which are described [here](#matching). It tries to match user input to any of the patterns of the ```Script``` and unify the result with the actions of pattern, hence it exploits [script structure](#structure-of-scripts). If it succeeds, it returns ```Action``` [which has to be done](#types-of-actions) in script search, ```Keyword``` of matched script and ```Pattern_index``` of matched pattern.
-  - after having found the answer to user input, Eliza prints it with predicate ```comment``` 
+  - after having found the answer to user input, ```get_comment/2``` returns it as ```Output```
+  
+- print ```Output``` with ```comment/1```
 
 
 
 ### Structure of scripts
 
-- 
+- scripts( script ( ```keyword```(```actual_keyword```, ```actual_keyword_priority```), ```list_of_patterns```))
+- each ```actual_keyword``` is followed by a ```list_of_patterns``` it may appear in each pattern has following structure : pattern( matched (```to_be_matched```), actions(```list_of_actions```)) each of these is described below
 
 
 
 ### Matching
 
-- 
+- the hidden gem of the implementation
+- because of the structure of patterns ```matched keyword``` is automatically unified with output in ```actions```
+- matching is done with aid of predicate ```match(+User_input, +To_be_matched)``` 
+  - we distinct 3 types of words to be matched :
+    - atom_is_to_be_matched -> we check all the declinations of word from user input and if any of them is equal to atom, we proceed to the rest of User_input and Pattern_input, otherwise we fail
+    - class_to_be_matched - > we got a list of predicates aiding us to match different kinds of words, which are called with predicate ```call(Predicate, Arg1,Arg2...)``` :
+      - synonyms (for example ```sad```, ```happy```...) which have following structure ```synonym(Word)``` which checks if word from the user input is declination of any of the synonyms and unifies it with Word (that means, that we can mention ```Word``` in actions and it'll be unified with user_input)
+      - conjugations (for example ```dream```, ```remember```) which have the following structure ```conjugation(+Verb, +Time, +Number, -Base)``` - successes if Verb has defined Time and Number
+    - variable_to_be_matched - same concept as the above
+
+- therefore when the user_input is matched by any of the patterns the results of matching are unified with actions of the pattern
+
+
+
+### Types of actions
+
+- response( ```list_of_atoms```) -> ```list_of_atoms``` is Eliza's comment of the user input, we can conclude searching for the output
+- ```newkey``` -> proceed to another keyword, don't look for anything in the current pattern anymore
+- ```equivalence(Keyword)``` -> the keyword in the current pattern is equivalent to ```Keyword``` proceed to this keyword in looking for Eliza's comment
 
 
 
