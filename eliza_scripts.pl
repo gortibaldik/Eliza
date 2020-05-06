@@ -982,7 +982,6 @@ scripts(
                 actions([
                     response([preco, si, myslite,',', ze, to, bola, From, Subject, prave, Grade, ?]),
                     response([koho, chyba, si, myslite,',', ze, to, bola, ?]),
-                    response([ste, z, toho, nestastny, ?]),
                     response([tak, vam, treba,',', ked, sa, neucite, ?]),
                     response([nechcete, sa, zacat, ucit, ?])
                 ])
@@ -991,10 +990,10 @@ scripts(
                 matched([_, class(school_grade, Grade,g), _, class(from, From),_, class(school_subject, Subject, g), _]),
                 actions([
                     response([blahozelam]),
-                    response([pochvalili, vas, rodicia, za, to, ?]),
+                    response([pochvalili, vas, za, to, rodicia, ?]),
                     response([neviem, ci, by, som, sa, tym, chvalila]),
                     response([zasluzene, ?]),
-                    response([ja, v, tvojom, veku, som, mala, len, jednotky]),
+                    response([ja, vo, vasom, veku, som, mala, len, jednotky]),
                     response([uzivate, si, to,',', citite, sa, dobre, ?])
                 ])
             ),
